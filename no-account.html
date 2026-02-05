@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Commandes - Aucune commande - Mystery Love Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        .hearts-bg {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(190, 18, 60, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+        }
+
+        .mobile-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Empty state animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Pulse animation for CTA */
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse-scale {
+            animation: pulse-scale 2s ease-in-out infinite;
+        }
+    </style>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-rose-950 via-red-900 to-pink-900 min-h-screen text-white hearts-bg">
+    
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-6">
+        <nav class="flex justify-between items-center mb-6">
+            <a href="index.html" class="text-rose-200 hover:text-rose-100 transition-colors flex items-center gap-2 font-medium">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span class="hidden sm:inline">Accueil</span>
+            </a>
+            
+            <h1 class="font-playfair text-2xl md:text-4xl font-bold bg-gradient-to-r from-pink-200 via-rose-300 to-red-200 bg-clip-text text-transparent">
+                Mystery Love Box
+            </h1>
+            
+            <div class="hidden md:flex items-center gap-4">
+                <a href="login.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
+                    🔐 Connexion
+                </a>
+                <a href="suivre-commande.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
+                    📦 Suivre
+                </a>
+                <a href="contact.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
+                    💬 Contact
+                </a>
+            </div>
+
+            <button onclick="toggleMobileMenu()" class="md:hidden text-rose-200 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </nav>
+
+        <div id="mobileMenu" class="mobile-menu bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-rose-300/30">
+            <div class="flex flex-col gap-4">
+                <a href="login.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
+                    🔐 Connexion
+                </a>
+                <a href="suivre-commande.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
+                    📦 Suivre commande
+                </a>
+                <a href="contact.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2">
+                    💬 Contact
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-5xl mx-auto">
+            
+            <!-- Page Header -->
+            <div class="text-center mb-8 animate-fade-in-up">
+                <div class="inline-block p-4 bg-gradient-to-br from-rose-500 to-red-600 rounded-full mb-4">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                </div>
+                <h2 class="font-playfair text-4xl md:text-5xl font-bold mb-3">
+                    Mes Commandes
+                </h2>
+                <p class="text-rose-200 text-lg">
+                    Retrouvez l'historique de vos achats et suivez vos livraisons
+                </p>
+            </div>
+
+            <!-- User Info Card -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-rose-300/30 mb-8 animate-fade-in-up delay-100">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-rose-400 to-red-500 rounded-full flex items-center justify-center text-2xl font-bold">
+                        JD
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Jean Dupont</h3>
+                        <p class="text-rose-200">jean.dupont@exemple.com</p>
+                    </div>
+                    <div class="ml-auto hidden md:block">
+                        <span class="px-4 py-2 bg-gray-500/20 border border-gray-400/50 rounded-full text-gray-300 font-semibold text-sm">
+                            👤 Nouveau Client
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-12 md:p-16 border border-rose-300/30 text-center animate-fade-in-up delay-200">
+                
+                <!-- Large Icon -->
+                <div class="mb-8 float-animation">
+                    <svg class="w-32 h-32 md:w-40 md:h-40 mx-auto text-rose-300/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                    </svg>
+                </div>
+
+                <!-- Main Message -->
+                <h3 class="font-playfair text-3xl md:text-4xl font-bold mb-4 text-white">
+                    Aucune commande pour le moment
+                </h3>
+                
+                <p class="text-rose-200 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Vous n'avez pas encore passé de commande. <br class="hidden md:block">
+                    Découvrez nos boîtes mystères et offrez un cadeau inoubliable pour la Saint-Valentin ! 💝
+                </p>
+
+                <!-- Benefits -->
+                <div class="grid md:grid-cols-3 gap-6 mb-10 max-w-3xl mx-auto">
+                    <div class="bg-white/5 rounded-xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="text-4xl mb-3">🎁</div>
+                        <h4 class="font-semibold text-white mb-2">3 Catégories</h4>
+                        <p class="text-rose-200 text-sm">Galant, Romantique ou Le Boss</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="text-4xl mb-3">✨</div>
+                        <h4 class="font-semibold text-white mb-2">100% Surprise</h4>
+                        <p class="text-rose-200 text-sm">Produits sélectionnés aléatoirement</p>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="text-4xl mb-3">🚚</div>
+                        <h4 class="font-semibold text-white mb-2">Livraison Gratuite</h4>
+                        <p class="text-rose-200 text-sm">Partout en France</p>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="mb-8">
+                    <a href="categories.html" 
+                       class="inline-block px-10 py-5 bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 
+                              text-white text-lg md:text-xl font-semibold rounded-full 
+                              transform transition-all duration-300 hover:scale-105 
+                              shadow-2xl hover:shadow-rose-500/50
+                              border-2 border-rose-300 tracking-wide uppercase pulse-scale">
+                        🎁 Découvrir les catégories
+                    </a>
+                </div>
+
+                <!-- Alternative actions -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="suivre-commande.html" class="text-rose-200 hover:text-white transition-colors font-medium flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        Suivre une commande existante
+                    </a>
+                    <span class="hidden sm:block text-rose-300/50">•</span>
+                    <a href="contact.html" class="text-rose-200 hover:text-white transition-colors font-medium flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Des questions ? Contactez-nous
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Why Choose Us Section -->
+            <div class="mt-12 animate-fade-in-up delay-300">
+                <h3 class="font-playfair text-3xl font-bold text-center mb-8 text-rose-200">
+                    Pourquoi Mystery Love Box ?
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white/5 rounded-2xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center text-2xl">
+                                💖
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-white mb-2">Expérience unique</h4>
+                                <p class="text-rose-200 text-sm">Offrez bien plus qu'un simple cadeau : une vraie surprise mémorable qui marquera les esprits.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center text-2xl">
+                                ⭐
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-white mb-2">Qualité garantie</h4>
+                                <p class="text-rose-200 text-sm">Tous nos produits sont soigneusement sélectionnés pour leur qualité premium et leur côté romantique.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center text-2xl">
+                                🎯
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-white mb-2">Simplicité maximale</h4>
+                                <p class="text-rose-200 text-sm">Pas de casse-tête : choisissez une catégorie, on s'occupe du reste. Simple, efficace, romantique.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 rounded-2xl p-6 border border-rose-300/20 hover:bg-white/10 transition-all duration-300">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center text-2xl">
+                                ⏱️
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg text-white mb-2">Livraison rapide</h4>
+                                <p class="text-rose-200 text-sm">Commandez maintenant et recevez votre boîte mystère à temps pour la Saint-Valentin.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Testimonials Preview -->
+            <div class="mt-12 bg-gradient-to-r from-rose-500/10 to-red-600/10 backdrop-blur-lg rounded-2xl p-8 border border-rose-300/30 text-center animate-fade-in-up delay-300">
+                <div class="text-5xl mb-4">⭐⭐⭐⭐⭐</div>
+                <p class="text-xl font-playfair italic text-white mb-2">
+                    "Ma partenaire a adoré la surprise ! Le concept est génial et les produits de qualité."
+                </p>
+                <p class="text-rose-200">— Thomas, client satisfait</p>
+                <div class="mt-6">
+                    <a href="#" class="text-rose-300 hover:text-rose-200 font-medium underline">
+                        Voir tous les témoignages →
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-4 py-12 mt-20 border-t border-rose-300/20">
+        <div class="text-center text-rose-200/60">
+            <p class="mb-2">© 2026 Mystery Love Box - Tous droits réservés</p>
+            <p class="text-sm">Créé avec ❤️ pour la Saint-Valentin</p>
+        </div>
+    </footer>
+
+</body>
+</html>

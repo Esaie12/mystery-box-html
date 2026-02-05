@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre commande est en route !</title>
+    <style>
+        body, table, td, a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f4;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #333333;
+            margin: 0 0 20px 0;
+        }
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0 0 30px 0;
+        }
+        .status-box {
+            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            border-left: 4px solid #9333ea;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        .status-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #7c3aed;
+            margin: 0 0 10px 0;
+        }
+        .status-text {
+            font-size: 15px;
+            color: #6b21a8;
+            margin: 0;
+        }
+        .tracking-box {
+            background-color: #f9f9f9;
+            border: 2px dashed #9333ea;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .tracking-label {
+            font-size: 12px;
+            color: #999999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 10px 0;
+        }
+        .tracking-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #9333ea;
+            font-family: monospace;
+            margin: 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .info-grid {
+            display: table;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .info-cell {
+            display: table-cell;
+            width: 50%;
+            padding: 15px;
+            background-color: #f9f9f9;
+            vertical-align: top;
+        }
+        .info-cell:first-child {
+            border-right: 1px solid #ffffff;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #999999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 0 8px 0;
+        }
+        .info-value {
+            font-size: 16px;
+            color: #333333;
+            margin: 0;
+            font-weight: 500;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #999999;
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #9333ea;
+            text-decoration: none;
+        }
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .content, .header {
+                padding: 30px 20px !important;
+            }
+            .info-grid {
+                display: block;
+            }
+            .info-cell {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .info-cell:first-child {
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td>
+                <div class="email-container">
+                    
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="icon">🚚</div>
+                        <h1>C'est parti !</h1>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="content">
+                        
+                        <p class="greeting">Bonjour Jean,</p>
+                        
+                        <p class="message">
+                            Excellente nouvelle ! Votre boîte mystère a quitté nos locaux et est maintenant en route vers sa destination. 
+                            La surprise arrivera bientôt ! 🎉
+                        </p>
+                        
+                        <!-- Status Box -->
+                        <div class="status-box">
+                            <p class="status-title">📦 Expédiée !</p>
+                            <p class="status-text">Votre commande est en cours de livraison</p>
+                        </div>
+                        
+                        <!-- Tracking Number -->
+                        <div class="tracking-box">
+                            <p class="tracking-label">Numéro de suivi</p>
+                            <p class="tracking-number">DHL123456789</p>
+                        </div>
+                        
+                        <!-- Delivery Info -->
+                        <div class="info-grid">
+                            <div class="info-cell">
+                                <p class="info-label">Transporteur</p>
+                                <p class="info-value">DHL Express</p>
+                            </div>
+                            <div class="info-cell">
+                                <p class="info-label">Livraison prévue</p>
+                                <p class="info-value">14 février 2026</p>
+                            </div>
+                        </div>
+                        
+                        <center>
+                            <a href="https://www.dhl.com/tracking?id=DHL123456789" class="button">
+                                📍 Suivre le colis
+                            </a>
+                        </center>
+                        
+                        <p class="message">
+                            <strong>Adresse de livraison :</strong><br>
+                            Sophie Martin<br>
+                            456 Avenue des Roses<br>
+                            69001 Lyon, France
+                        </p>
+                        
+                        <p class="message" style="background-color: #fff8dc; padding: 15px; border-radius: 8px; border-left: 4px solid #fbbf24;">
+                            <strong>💡 Conseil :</strong> Assurez-vous que quelqu'un soit présent à l'adresse de livraison pour réceptionner le colis. 
+                            En cas d'absence, le transporteur laissera un avis de passage.
+                        </p>
+                        
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        <p>
+                            <strong>Questions sur votre livraison ?</strong><br>
+                            <a href="mailto:contact@mystery-kdo.com">contact@mystery-kdo.com</a>
+                        </p>
+                        <p style="font-size: 12px; color: #bbbbbb; margin-top: 20px;">
+                            Mystery Love Box © 2026
+                        </p>
+                    </div>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

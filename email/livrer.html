@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre commande a été livrée !</title>
+    <style>
+        body, table, td, a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f4;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #333333;
+            margin: 0 0 20px 0;
+        }
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0 0 30px 0;
+        }
+        .status-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #16a34a;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .status-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #15803d;
+            margin: 0 0 10px 0;
+        }
+        .status-text {
+            font-size: 16px;
+            color: #166534;
+            margin: 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .button-secondary {
+            background: #ffffff;
+            color: #16a34a !important;
+            border: 2px solid #16a34a;
+        }
+        .stars {
+            font-size: 32px;
+            margin: 20px 0;
+        }
+        .divider {
+            height: 1px;
+            background-color: #eeeeee;
+            margin: 30px 0;
+        }
+        .review-box {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .review-box h3 {
+            font-size: 20px;
+            color: #333333;
+            margin: 0 0 15px 0;
+        }
+        .review-box p {
+            font-size: 15px;
+            color: #666666;
+            margin: 0 0 20px 0;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #999999;
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #16a34a;
+            text-decoration: none;
+        }
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .content, .header {
+                padding: 30px 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td>
+                <div class="email-container">
+                    
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="icon">🎉</div>
+                        <h1>Livrée avec succès !</h1>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="content">
+                        
+                        <p class="greeting">Bonjour Jean,</p>
+                        
+                        <p class="message">
+                            Félicitations ! Votre Mystery Love Box a bien été livrée. 
+                            Nous espérons que la surprise a fait son effet et que le sourire était au rendez-vous ! 💝
+                        </p>
+                        
+                        <!-- Status Box -->
+                        <div class="status-box">
+                            <p class="status-title">✓ Livraison réussie</p>
+                            <p class="status-text">Le 14 février 2026 à 15:30</p>
+                        </div>
+                        
+                        <p class="message">
+                            <strong>Commande :</strong> #MLB-2026-001234<br>
+                            <strong>Livrée à :</strong> Sophie Martin, 456 Avenue des Roses, Lyon
+                        </p>
+                        
+                        <div class="divider"></div>
+                        
+                        <!-- Review Request -->
+                        <div class="review-box">
+                            <h3>Votre avis compte ! ⭐</h3>
+                            <p>
+                                Vous avez quelques secondes ? Partagez votre expérience avec la communauté. 
+                                Votre retour nous aide à améliorer nos services et aide d'autres clients à faire leur choix.
+                            </p>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                            <center>
+                                <a href="https://mystery-kdo.com/avis?order=MLB-2026-001234" class="button">
+                                    ✍️ Laisser un avis
+                                </a>
+                            </center>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <p class="message">
+                            <strong>Et maintenant ?</strong>
+                        </p>
+                        
+                        <p class="message">
+                            ✨ Partagez votre expérience sur les réseaux sociaux avec #MysteryLoveBox<br>
+                            💝 Recommandez-nous à vos amis (ils recevront 10% de réduction)<br>
+                            📸 Envoyez-nous des photos de la réaction sur Instagram !
+                        </p>
+                        
+                        <center>
+                            <a href="https://mystery-kdo.com/parrainer" class="button button-secondary">
+                                🎁 Parrainer un ami
+                            </a>
+                        </center>
+                        
+                        <p class="message" style="margin-top: 30px;">
+                            Un grand merci pour votre confiance. Nous serions ravis de vous recompter pour les prochaines occasions ! 🌹
+                        </p>
+                        
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        <p>
+                            <strong>Un problème avec votre commande ?</strong><br>
+                            <a href="mailto:contact@mystery-kdo.com">Contactez-nous</a> dans les 48h
+                        </p>
+                        <div style="margin: 20px 0;">
+                            <a href="#" style="margin: 0 10px; font-size: 24px;">📘</a>
+                            <a href="#" style="margin: 0 10px; font-size: 24px;">📷</a>
+                            <a href="#" style="margin: 0 10px; font-size: 24px;">🐦</a>
+                        </div>
+                        <p style="font-size: 12px; color: #bbbbbb; margin-top: 20px;">
+                            Mystery Love Box © 2026
+                        </p>
+                    </div>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

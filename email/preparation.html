@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre commande est en préparation</title>
+    <style>
+        body, table, td, a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f4;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #333333;
+            margin: 0 0 20px 0;
+        }
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0 0 30px 0;
+        }
+        .status-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #2563eb;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        .status-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 0 0 10px 0;
+        }
+        .status-text {
+            font-size: 15px;
+            color: #1e3a8a;
+            margin: 0;
+        }
+        .order-number {
+            font-size: 16px;
+            color: #999999;
+            margin: 10px 0 0 0;
+            font-family: monospace;
+        }
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .timeline {
+            margin: 30px 0;
+        }
+        .timeline-item {
+            display: flex;
+            margin: 20px 0;
+            align-items: center;
+        }
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        .timeline-icon.done {
+            background-color: #22c55e;
+            color: white;
+        }
+        .timeline-icon.current {
+            background-color: #2563eb;
+            color: white;
+        }
+        .timeline-icon.pending {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+        }
+        .timeline-content h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            color: #333333;
+        }
+        .timeline-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #999999;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #999999;
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .content, .header {
+                padding: 30px 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td>
+                <div class="email-container">
+                    
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="icon">⚙️</div>
+                        <h1>Préparation en cours</h1>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="content">
+                        
+                        <p class="greeting">Bonjour Jean,</p>
+                        
+                        <p class="message">
+                            Bonne nouvelle ! Notre équipe a commencé à préparer votre boîte mystère. 
+                            Nous sélectionnons soigneusement chaque produit pour créer la surprise parfaite. 🎨
+                        </p>
+                        
+                        <!-- Status Box -->
+                        <div class="status-box">
+                            <p class="status-title">⚙️ En cours de préparation</p>
+                            <p class="status-text">Nos experts composent votre boîte avec amour</p>
+                            <p class="order-number">Commande #MLB-2026-001234</p>
+                        </div>
+                        
+                        <!-- Timeline -->
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-icon done">✓</div>
+                                <div class="timeline-content">
+                                    <h4>Commande confirmée</h4>
+                                    <p>10 février 2026, 14:30</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-icon done">✓</div>
+                                <div class="timeline-content">
+                                    <h4>Paiement reçu</h4>
+                                    <p>10 février 2026, 14:31</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-icon current">⚙️</div>
+                                <div class="timeline-content">
+                                    <h4>Préparation</h4>
+                                    <p>En cours...</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-icon pending">📦</div>
+                                <div class="timeline-content">
+                                    <h4>Expédition</h4>
+                                    <p>Prochainement</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <center>
+                            <a href="https://mystery-kdo.com/suivre-commande?id=MLB-2026-001234" class="button">
+                                📦 Suivre ma commande
+                            </a>
+                        </center>
+                        
+                        <p class="message">
+                            Patience, la magie opère ! Vous recevrez un nouvel email dès que votre commande sera expédiée. 🚀
+                        </p>
+                        
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        <p>
+                            <strong>Une question ?</strong><br>
+                            <a href="mailto:contact@mystery-kdo.com">contact@mystery-kdo.com</a>
+                        </p>
+                        <p style="font-size: 12px; color: #bbbbbb; margin-top: 20px;">
+                            Mystery Love Box © 2026
+                        </p>
+                    </div>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

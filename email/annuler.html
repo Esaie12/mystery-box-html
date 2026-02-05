@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annulation de commande</title>
+    <style>
+        body, table, td, a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f4f4;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin: 0;
+            font-weight: 600;
+        }
+        .icon {
+            font-size: 56px;
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #333333;
+            margin: 0 0 20px 0;
+        }
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0 0 30px 0;
+        }
+        .status-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #dc2626;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        .status-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #991b1b;
+            margin: 0 0 10px 0;
+        }
+        .status-text {
+            font-size: 15px;
+            color: #7f1d1d;
+            margin: 0;
+        }
+        .order-details {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-size: 14px;
+            color: #999999;
+        }
+        .detail-value {
+            font-size: 14px;
+            color: #333333;
+            font-weight: 500;
+        }
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #C41E3A 0%, #8B1538 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .info-box {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .info-box p {
+            margin: 0;
+            font-size: 15px;
+            color: #92400e;
+            line-height: 1.6;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #999999;
+            margin: 5px 0;
+        }
+        .footer a {
+            color: #dc2626;
+            text-decoration: none;
+        }
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .content, .header {
+                padding: 30px 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td>
+                <div class="email-container">
+                    
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="icon">⚠️</div>
+                        <h1>Commande annulée</h1>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="content">
+                        
+                        <p class="greeting">Bonjour Jean,</p>
+                        
+                        <p class="message">
+                            Nous vous confirmons que votre commande a été annulée comme demandé. 
+                            Nous sommes désolés de voir que cela n'a pas fonctionné cette fois-ci.
+                        </p>
+                        
+                        <!-- Status Box -->
+                        <div class="status-box">
+                            <p class="status-title">✗ Commande annulée</p>
+                            <p class="status-text">Annulée le 11 février 2026 à 10:15</p>
+                        </div>
+                        
+                        <!-- Order Details -->
+                        <div class="order-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Numéro de commande</span>
+                                <span class="detail-value">#MLB-2026-001234</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Date d'achat</span>
+                                <span class="detail-value">10 février 2026</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Montant</span>
+                                <span class="detail-value">49,99 €</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Raison</span>
+                                <span class="detail-value">Demande du client</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Refund Info -->
+                        <div class="info-box">
+                            <p>
+                                <strong>💰 Remboursement :</strong> Le montant de 49,99 € sera remboursé sur votre moyen de paiement 
+                                d'origine sous 5-7 jours ouvrés. Vous recevrez une notification dès que le remboursement sera effectué.
+                            </p>
+                        </div>
+                        
+                        <p class="message">
+                            <strong>Nous aimerions comprendre :</strong><br>
+                            Si vous avez quelques instants, pourriez-vous nous indiquer la raison de cette annulation ? 
+                            Cela nous aidera à améliorer nos services.
+                        </p>
+                        
+                        <center>
+                            <a href="https://mystery-kdo.com/feedback?order=MLB-2026-001234" class="button">
+                                💬 Donner mon avis
+                            </a>
+                        </center>
+                        
+                        <p class="message" style="margin-top: 30px;">
+                            Nous espérons vous revoir bientôt ! N'hésitez pas à nous contacter si vous avez des questions 
+                            ou si nous pouvons faire quelque chose pour vous.
+                        </p>
+                        
+                        <center>
+                            <a href="https://mystery-kdo.com/categories" style="color: #C41E3A; text-decoration: none; font-weight: 600;">
+                                → Explorer nos catégories
+                            </a>
+                        </center>
+                        
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        <p>
+                            <strong>Besoin d'aide ?</strong><br>
+                            <a href="mailto:contact@mystery-kdo.com">contact@mystery-kdo.com</a>
+                        </p>
+                        <p style="font-size: 12px; color: #bbbbbb; margin-top: 20px;">
+                            Mystery Love Box © 2026
+                        </p>
+                    </div>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

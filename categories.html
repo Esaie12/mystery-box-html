@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catégories - Mystery Love Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        .hearts-bg {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(190, 18, 60, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+        }
+        
+        /* Effet shimmer sur les cartes au survol */
+        .shimmer-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        /* Menu mobile */
+        .mobile-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-rose-950 via-red-900 to-pink-900 min-h-screen text-white hearts-bg">
+    
+    <!-- Header avec navigation -->
+    <header class="container mx-auto px-4 py-6">
+        <!-- Menu de navigation -->
+        <nav class="flex justify-between items-center mb-6">
+            <a href="index.html" class="text-rose-200 hover:text-rose-100 transition-colors flex items-center gap-2 font-medium">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span class="hidden sm:inline">Retour</span>
+            </a>
+            
+            <h1 class="font-playfair text-2xl md:text-4xl font-bold bg-gradient-to-r from-pink-200 via-rose-300 to-red-200 bg-clip-text text-transparent">
+                Mystery Love Box
+            </h1>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="#connexion" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium hover:scale-105 transform">
+                    🔐 Connexion
+                </a>
+                <a href="#suivre" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium hover:scale-105 transform">
+                    📦 Suivre
+                </a>
+                <a href="#contact" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium hover:scale-105 transform">
+                    💬 Contact
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button onclick="toggleMobileMenu()" class="md:hidden text-rose-200 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="mobile-menu bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-rose-300/30">
+            <div class="flex flex-col gap-4">
+                <a href="#connexion" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
+                    🔐 Connexion
+                </a>
+                <a href="#suivre" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
+                    📦 Suivre commande
+                </a>
+                <a href="#contact" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2">
+                    💬 Contact
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 py-8 text-center">
+        <h2 class="font-playfair text-4xl md:text-6xl font-bold mb-4 animate-fade-in-up">
+            Choisissez votre <span class="italic text-rose-300">style</span>
+        </h2>
+        <p class="text-lg md:text-xl text-rose-100 max-w-3xl mx-auto animate-fade-in-up delay-100">
+            Chaque catégorie contient une sélection unique de produits. 
+            Vous découvrirez ce que vous recevrez seulement après votre commande ! 🎁
+        </p>
+    </section>
+
+    <!-- Catégories -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            
+            <!-- Catégorie 1 : Galant -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl overflow-hidden border-2 border-rose-300/30 
+                        hover:border-rose-300/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl
+                        animate-fade-in-up shimmer-effect group">
+                
+                <!-- Header de la carte -->
+                <div class="bg-gradient-to-br from-rose-600 to-red-700 p-8 text-center relative">
+                    <div class="absolute top-4 right-4 text-4xl">🌹</div>
+                    <h3 class="font-playfair text-4xl font-bold mb-2">Galant</h3>
+                    <p class="text-rose-100 text-sm tracking-wider uppercase">Le Gentleman Romantique</p>
+                </div>
+
+                <!-- Description -->
+                <div class="p-6">
+                    <p class="text-rose-100 mb-6 text-center">
+                        Pour les amoureux classiques qui apprécient l'élégance et le raffinement.
+                    </p>
+                    
+                    <!-- Produits potentiels -->
+                    <div class="space-y-3 mb-6">
+                        <h4 class="font-semibold text-rose-200 text-sm uppercase tracking-wider border-b border-rose-300/30 pb-2">
+                            Produits potentiels :
+                        </h4>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">📦</span>
+                            <span class="text-rose-100">Boîte premium 1</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">📦</span>
+                            <span class="text-rose-100">Boîte premium 2</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🌹</span>
+                            <span class="text-rose-100">Bouquet de fleurs</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">👗</span>
+                            <span class="text-rose-100">Pagne élégant</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🍷</span>
+                            <span class="text-rose-100">Vin de qualité</span>
+                        </div>
+                    </div>
+
+                    <!-- Note mystère -->
+                    <div class="bg-rose-500/20 border border-rose-300/30 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-rose-100 text-center">
+                            <span class="font-semibold">🎲 Mystère :</span> Vous recevrez 2 à 3 produits sélectionnés aléatoirement !
+                        </p>
+                    </div>
+
+                    <!-- Bouton -->
+                    <button class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 
+                                   text-white font-semibold py-4 rounded-xl transition-all duration-300 
+                                   transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Choisir Galant
+                    </button>
+                </div>
+            </div>
+
+            <!-- Catégorie 2 : Romantique -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl overflow-hidden border-2 border-pink-300/30 
+                        hover:border-pink-300/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl
+                        animate-fade-in-up delay-100 shimmer-effect group">
+                
+                <!-- Header de la carte -->
+                <div class="bg-gradient-to-br from-pink-600 to-rose-700 p-8 text-center relative">
+                    <div class="absolute top-4 right-4 text-4xl">💕</div>
+                    <h3 class="font-playfair text-4xl font-bold mb-2">Romantique</h3>
+                    <p class="text-pink-100 text-sm tracking-wider uppercase">Le Cœur Tendre</p>
+                </div>
+
+                <!-- Description -->
+                <div class="p-6">
+                    <p class="text-rose-100 mb-6 text-center">
+                        Pour les âmes sensibles qui célèbrent l'amour dans toute sa douceur.
+                    </p>
+                    
+                    <!-- Produits potentiels -->
+                    <div class="space-y-3 mb-6">
+                        <h4 class="font-semibold text-rose-200 text-sm uppercase tracking-wider border-b border-rose-300/30 pb-2">
+                            Produits potentiels :
+                        </h4>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🕯️</span>
+                            <span class="text-rose-100">Bougies parfumées</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🍫</span>
+                            <span class="text-rose-100">Chocolats artisanaux</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">💌</span>
+                            <span class="text-rose-100">Carte d'amour personnalisée</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🧴</span>
+                            <span class="text-rose-100">Coffret spa & bien-être</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🎵</span>
+                            <span class="text-rose-100">Playlist romantique personnalisée</span>
+                        </div>
+                    </div>
+
+                    <!-- Note mystère -->
+                    <div class="bg-pink-500/20 border border-pink-300/30 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-rose-100 text-center">
+                            <span class="font-semibold">🎲 Mystère :</span> Vous recevrez 2 à 3 produits sélectionnés aléatoirement !
+                        </p>
+                    </div>
+
+                    <!-- Bouton -->
+                    <button class="w-full bg-gradient-to-r from-pink-600 to-rose-700 hover:from-pink-500 hover:to-rose-600 
+                                   text-white font-semibold py-4 rounded-xl transition-all duration-300 
+                                   transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Choisir Romantique
+                    </button>
+                </div>
+            </div>
+
+            <!-- Catégorie 3 : Le Boss -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl overflow-hidden border-2 border-amber-300/30 
+                        hover:border-amber-300/60 transition-all duration-500 hover:scale-105 hover:shadow-2xl
+                        animate-fade-in-up delay-200 shimmer-effect group">
+                
+                <!-- Header de la carte -->
+                <div class="bg-gradient-to-br from-amber-600 to-orange-700 p-8 text-center relative">
+                    <div class="absolute top-4 right-4 text-4xl">👑</div>
+                    <h3 class="font-playfair text-4xl font-bold mb-2">Le Boss</h3>
+                    <p class="text-amber-100 text-sm tracking-wider uppercase">Le Prestige Absolu</p>
+                </div>
+
+                <!-- Description -->
+                <div class="p-6">
+                    <p class="text-rose-100 mb-6 text-center">
+                        Pour ceux qui ne font aucun compromis et veulent ce qu'il y a de meilleur.
+                    </p>
+                    
+                    <!-- Produits potentiels -->
+                    <div class="space-y-3 mb-6">
+                        <h4 class="font-semibold text-rose-200 text-sm uppercase tracking-wider border-b border-rose-300/30 pb-2">
+                            Produits potentiels :
+                        </h4>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">💍</span>
+                            <span class="text-rose-100">Bijou de luxe</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🥂</span>
+                            <span class="text-rose-100">Champagne millésimé</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">👜</span>
+                            <span class="text-rose-100">Accessoire de marque</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🌹</span>
+                            <span class="text-rose-100">Roses éternelles premium</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors">
+                            <span class="text-2xl">🎁</span>
+                            <span class="text-rose-100">Expérience VIP exclusive</span>
+                        </div>
+                    </div>
+
+                    <!-- Note mystère -->
+                    <div class="bg-amber-500/20 border border-amber-300/30 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-rose-100 text-center">
+                            <span class="font-semibold">🎲 Mystère :</span> Vous recevrez 3 à 4 produits premium sélectionnés !
+                        </p>
+                    </div>
+
+                    <!-- Bouton -->
+                    <button class="w-full bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 
+                                   text-white font-semibold py-4 rounded-xl transition-all duration-300 
+                                   transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Choisir Le Boss
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Informations supplémentaires -->
+        <div class="max-w-4xl mx-auto mt-16 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-rose-300/20">
+            <h3 class="font-playfair text-3xl font-bold text-center mb-6 text-rose-200">
+                ✨ Comment fonctionne la sélection ?
+            </h3>
+            <div class="space-y-4 text-rose-100">
+                <p class="flex items-start gap-3">
+                    <span class="text-2xl flex-shrink-0">🎯</span>
+                    <span>Lorsque vous choisissez une catégorie, notre système sélectionne automatiquement une combinaison unique de produits parmi ceux disponibles.</span>
+                </p>
+                <p class="flex items-start gap-3">
+                    <span class="text-2xl flex-shrink-0">🎁</span>
+                    <span>Chaque boîte est différente - vous ne saurez exactement ce que vous recevrez qu'à l'ouverture !</span>
+                </p>
+                <p class="flex items-start gap-3">
+                    <span class="text-2xl flex-shrink-0">💝</span>
+                    <span>Tous les produits sont de haute qualité et soigneusement emballés pour créer une expérience inoubliable.</span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-4 py-12 mt-20 border-t border-rose-300/20">
+        <div class="text-center text-rose-200/60">
+            <p class="mb-2">© 2026 Mystery Love Box - Tous droits réservés</p>
+            <p class="text-sm">Créé avec ❤️ pour la Saint-Valentin</p>
+        </div>
+    </footer>
+
+</body>
+</html>

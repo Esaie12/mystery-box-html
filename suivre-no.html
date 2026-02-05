@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande introuvable - Mystery Love Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        
+        .hearts-bg {
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(190, 18, 60, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
+        }
+
+        .mobile-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Shake animation for error icon */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        .shake-animation {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Pulse for icons */
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .pulse-icon {
+            animation: pulse-icon 2s ease-in-out infinite;
+        }
+    </style>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        function searchOrder(event) {
+            event.preventDefault();
+            const orderNumber = document.getElementById('order-number').value;
+            
+            if (!orderNumber) {
+                alert('Veuillez entrer un numéro de commande');
+                return;
+            }
+            
+            // Simulate search - in real app, this would call an API
+            // For demo, always show "not found"
+            showNotFoundState(orderNumber);
+        }
+
+        function showNotFoundState(orderNumber) {
+            const errorIcon = document.getElementById('error-icon');
+            errorIcon.classList.add('shake-animation');
+            
+            setTimeout(() => {
+                errorIcon.classList.remove('shake-animation');
+            }, 500);
+        }
+
+        function retrySearch() {
+            document.getElementById('order-number').focus();
+            document.getElementById('order-number').select();
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-rose-950 via-red-900 to-pink-900 min-h-screen text-white hearts-bg">
+    
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-6">
+        <nav class="flex justify-between items-center mb-6">
+            <a href="index.html" class="text-rose-200 hover:text-rose-100 transition-colors flex items-center gap-2 font-medium">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span class="hidden sm:inline">Accueil</span>
+            </a>
+            
+            <h1 class="font-playfair text-2xl md:text-4xl font-bold bg-gradient-to-r from-pink-200 via-rose-300 to-red-200 bg-clip-text text-transparent">
+                Mystery Love Box
+            </h1>
+            
+            <div class="hidden md:flex items-center gap-4">
+                <a href="login.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
+                    🔐 Connexion
+                </a>
+                <a href="register.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
+                    ✨ S'inscrire
+                </a>
+                <a href="contact.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
+                    💬 Contact
+                </a>
+            </div>
+
+            <button onclick="toggleMobileMenu()" class="md:hidden text-rose-200 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </nav>
+
+        <div id="mobileMenu" class="mobile-menu bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-rose-300/30">
+            <div class="flex flex-col gap-4">
+                <a href="login.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
+                    🔐 Connexion
+                </a>
+                <a href="register.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
+                    ✨ S'inscrire
+                </a>
+                <a href="contact.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2">
+                    💬 Contact
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Title -->
+            <div class="text-center mb-12 animate-fade-in-up">
+                <h2 class="font-playfair text-4xl md:text-5xl font-bold mb-4">
+                    Suivez votre commande
+                </h2>
+                <p class="text-rose-200 text-lg">
+                    Entrez votre numéro de commande pour voir où en est votre cadeau mystère
+                </p>
+            </div>
+
+            <!-- Search Form -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-rose-300/30 shadow-2xl mb-12 animate-fade-in-up delay-100">
+                <form onsubmit="searchOrder(event)" class="flex flex-col md:flex-row gap-4">
+                    <input 
+                        type="text" 
+                        id="order-number"
+                        placeholder="Ex: MLB-2026-001234"
+                        value="MLB-2026-999999"
+                        class="flex-1 px-6 py-4 rounded-xl bg-white/5 border border-rose-300/30 
+                               text-white placeholder-rose-300/50 text-lg
+                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
+                               transition-all duration-300"
+                    >
+                    <button 
+                        type="submit"
+                        class="px-8 py-4 bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 
+                               text-white font-semibold rounded-xl transition-all duration-300 
+                               transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                        🔍 Rechercher
+                    </button>
+                </form>
+            </div>
+
+            <!-- Error State - Order Not Found -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-12 md:p-16 border border-rose-300/30 shadow-2xl text-center animate-fade-in-up delay-200">
+                
+                <!-- Error Icon -->
+                <div id="error-icon" class="mb-8">
+                    <div class="inline-block p-6 bg-red-500/20 rounded-full border-4 border-red-400/50">
+                        <svg class="w-24 h-24 md:w-32 md:h-32 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <h3 class="font-playfair text-3xl md:text-4xl font-bold mb-4 text-white">
+                    Commande introuvable
+                </h3>
+                
+                <p class="text-rose-200 text-lg mb-2">
+                    Le numéro de commande <span class="font-mono font-bold text-white">MLB-2026-999999</span> n'existe pas dans notre système.
+                </p>
+                
+                <p class="text-rose-300 text-base mb-8">
+                    Veuillez vérifier le numéro et réessayer.
+                </p>
+
+                <!-- Possible Reasons -->
+                <div class="bg-red-500/10 border border-red-400/30 rounded-2xl p-6 mb-8 text-left max-w-2xl mx-auto">
+                    <h4 class="font-semibold text-lg text-white mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Raisons possibles :
+                    </h4>
+                    <ul class="space-y-3 text-rose-200">
+                        <li class="flex items-start gap-3">
+                            <span class="text-red-400 flex-shrink-0 mt-1">•</span>
+                            <span>Le numéro de commande contient une erreur de frappe</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-red-400 flex-shrink-0 mt-1">•</span>
+                            <span>La commande n'a pas encore été enregistrée dans notre système (délai 5-10 min)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-red-400 flex-shrink-0 mt-1">•</span>
+                            <span>Le numéro provient d'un autre site ou vendeur</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-red-400 flex-shrink-0 mt-1">•</span>
+                            <span>La commande a été annulée ou supprimée</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Help Section -->
+                <div class="mb-8">
+                    <h4 class="font-semibold text-lg text-white mb-4">Où trouver mon numéro de commande ?</h4>
+                    <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                        <div class="bg-white/5 rounded-xl p-4 border border-rose-300/20">
+                            <div class="text-3xl mb-2">📧</div>
+                            <h5 class="font-semibold text-white mb-1">Email de confirmation</h5>
+                            <p class="text-rose-200 text-sm">Vérifiez votre boîte mail (et spams)</p>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 border border-rose-300/20">
+                            <div class="text-3xl mb-2">👤</div>
+                            <h5 class="font-semibold text-white mb-1">Mon compte</h5>
+                            <p class="text-rose-200 text-sm">Consultez votre historique de commandes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Format Example -->
+                <div class="bg-blue-500/10 border border-blue-400/30 rounded-xl p-6 mb-8 max-w-md mx-auto">
+                    <p class="text-blue-200 text-sm mb-2">Format attendu du numéro :</p>
+                    <div class="font-mono text-2xl font-bold text-white bg-white/10 px-4 py-3 rounded-lg">
+                        MLB-2026-XXXXXX
+                    </div>
+                    <p class="text-blue-300 text-xs mt-2">12 caractères incluant les tirets</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                    <button 
+                        onclick="retrySearch()"
+                        class="px-8 py-4 bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 
+                               text-white font-semibold rounded-xl transition-all duration-300 
+                               transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    >
+                        🔄 Réessayer
+                    </button>
+                    <a 
+                        href="mes-commandes.html"
+                        class="px-8 py-4 bg-white/10 hover:bg-white/20 border border-rose-300/30 hover:border-rose-300/50
+                               text-white font-semibold rounded-xl transition-all duration-300"
+                    >
+                        📦 Voir mes commandes
+                    </a>
+                </div>
+
+                <!-- Contact Support -->
+                <div class="pt-6 border-t border-rose-300/30">
+                    <p class="text-rose-200 mb-4">Toujours un problème ?</p>
+                    <a 
+                        href="contact.html"
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 
+                               border border-rose-300/30 hover:border-rose-300/50
+                               text-rose-200 hover:text-white rounded-xl transition-all duration-300"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        Contacter le support
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Additional Help -->
+            <div class="grid md:grid-cols-3 gap-6 mt-12 animate-fade-in-up delay-300">
+                
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-rose-300/20 text-center hover:bg-white/10 transition-all duration-300">
+                    <div class="text-4xl mb-3 pulse-icon">❓</div>
+                    <h4 class="font-semibold text-white mb-2">Questions fréquentes</h4>
+                    <p class="text-rose-200 text-sm mb-4">Trouvez des réponses rapides</p>
+                    <a href="#" class="text-rose-300 hover:text-rose-200 text-sm font-medium">
+                        Consulter la FAQ →
+                    </a>
+                </div>
+
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-rose-300/20 text-center hover:bg-white/10 transition-all duration-300">
+                    <div class="text-4xl mb-3 pulse-icon">📧</div>
+                    <h4 class="font-semibold text-white mb-2">Email perdu ?</h4>
+                    <p class="text-rose-200 text-sm mb-4">Renvoyer la confirmation</p>
+                    <a href="#" class="text-rose-300 hover:text-rose-200 text-sm font-medium">
+                        Renvoyer l'email →
+                    </a>
+                </div>
+
+                <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-rose-300/20 text-center hover:bg-white/10 transition-all duration-300">
+                    <div class="text-4xl mb-3 pulse-icon">🛒</div>
+                    <h4 class="font-semibold text-white mb-2">Nouvelle commande</h4>
+                    <p class="text-rose-200 text-sm mb-4">Pas encore commandé ?</p>
+                    <a href="categories.html" class="text-rose-300 hover:text-rose-200 text-sm font-medium">
+                        Découvrir nos boîtes →
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-4 py-12 mt-20 border-t border-rose-300/20">
+        <div class="text-center text-rose-200/60">
+            <p class="mb-2">© 2026 Mystery Love Box - Tous droits réservés</p>
+            <p class="text-sm">Créé avec ❤️ pour la Saint-Valentin</p>
+        </div>
+    </footer>
+
+</body>
+</html>
