@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue - Mystery Love Box</title>
+    <style>
+        /* Reset styles */
+        body, table, td, a {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+            height: 100% !important;
+            background-color: #f4f4f4;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        /* Main styles */
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8B1538 0%, #C41E3A 100%);
+            padding: 50px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #ffffff;
+            font-size: 32px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            margin: 15px 0 0 0;
+            font-style: italic;
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .welcome-message {
+            font-size: 24px;
+            color: #C41E3A;
+            margin: 0 0 20px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .intro {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666666;
+            margin: 0 0 30px 0;
+            text-align: center;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #666666;
+            margin: 0 0 20px 0;
+        }
+        
+        /* Box categories */
+        .categories-container {
+            margin: 30px 0;
+        }
+        
+        .category-box {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #C41E3A;
+            transition: transform 0.3s;
+        }
+        
+        .category-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333333;
+            margin: 0 0 8px 0;
+        }
+        
+        .category-description {
+            font-size: 14px;
+            color: #999999;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .category-price {
+            font-size: 18px;
+            color: #C41E3A;
+            font-weight: 700;
+            margin: 10px 0 0 0;
+        }
+        
+        /* Promo Box */
+        .promo-box {
+            background: linear-gradient(135deg, #fff8dc 0%, #ffe4e6 100%);
+            border: 2px dashed #C41E3A;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .promo-code {
+            font-size: 28px;
+            font-weight: 700;
+            color: #C41E3A;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .promo-text {
+            font-size: 14px;
+            color: #666666;
+            margin: 5px 0;
+        }
+        
+        .promo-emoji {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        /* Benefits */
+        .benefits {
+            margin: 30px 0;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+        
+        .benefit-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .benefit-text {
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #C41E3A 0%, #8B1538 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #eeeeee;
+            margin: 30px 0;
+        }
+        
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer p {
+            font-size: 14px;
+            color: #999999;
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        
+        .footer a {
+            color: #C41E3A;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 28px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        
+        .social-links a:hover {
+            transform: scale(1.2);
+        }
+        
+        .signature {
+            font-style: italic;
+            color: #999999;
+            margin-top: 30px;
+            text-align: right;
+        }
+        
+        /* Responsive */
+        @media screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 40px 20px !important;
+            }
+            .category-box {
+                padding: 15px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td>
+                <!-- Email Container -->
+                <div class="email-container">
+                    
+                    <!-- Header -->
+                    <div class="header">
+                        <div class="icon">🎁</div>
+                        <h1>Mystery Love Box</h1>
+                        <p>Bienvenue dans l'univers de la surprise romantique</p>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="content">
+                        
+                        <p class="welcome-message">
+                            Bienvenue Sophie ! 💕
+                        </p>
+                        
+                        <p class="intro">
+                            Nous sommes ravis de vous accueillir dans la famille Mystery Love Box !<br>
+                            Préparez-vous à faire vibrer les cœurs...
+                        </p>
+                        
+                        <p class="message">
+                            Chez Mystery Love Box, nous croyons que les meilleures surprises sont celles qui viennent du cœur. 
+                            C'est pourquoi chacune de nos box est soigneusement composée pour créer des moments magiques et inoubliables. ✨
+                        </p>
+                        
+                        <!-- Promo Box -->
+                        <div class="promo-box">
+                            <div class="promo-emoji">🎉</div>
+                            <p class="promo-text"><strong>Cadeau de bienvenue exclusif !</strong></p>
+                            <p class="promo-code">BIENVENUE15</p>
+                            <p class="promo-text">
+                                <strong>15% de réduction</strong> sur votre première commande<br>
+                                <em>Valable 7 jours</em>
+                            </p>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <!-- Categories -->
+                        <h2 style="text-align: center; color: #333333; font-size: 24px; margin: 30px 0 20px 0;">
+                            Découvrez nos Mystery Box
+                        </h2>
+                        
+                        <div class="categories-container">
+                            
+                            <!-- Category 1: Galant -->
+                            <div class="category-box">
+                                <div class="category-icon">🌹</div>
+                                <p class="category-title">Box Galant</p>
+                                <p class="category-description">
+                                    Une attention délicate et élégante. Parfaite pour exprimer vos sentiments avec raffinement.
+                                    Bracelet délicat, parfum miniature, savons artisanaux...
+                                </p>
+                                <p class="category-price">49,99 €</p>
+                            </div>
+                            
+                            <!-- Category 2: Romantique -->
+                            <div class="category-box">
+                                <div class="category-icon">💕</div>
+                                <p class="category-title">Box Romantique</p>
+                                <p class="category-description">
+                                    L'essence même de l'amour et de la passion. Une box qui fait battre les cœurs.
+                                    Bougie parfumée, chocolats artisanaux, carte personnalisée, rose éternelle...
+                                </p>
+                                <p class="category-price">49,99 €</p>
+                            </div>
+                            
+                            <!-- Category 3: Le Boss -->
+                            <div class="category-box">
+                                <div class="category-icon">👑</div>
+                                <p class="category-title">Box Le Boss</p>
+                                <p class="category-description">
+                                    Le summum du luxe et de l'attention. Pour celle qui mérite le meilleur.
+                                    Accessoires luxe, thé premium, carnet cuir, bijou élégant...
+                                </p>
+                                <p class="category-price">49,99 €</p>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <!-- Benefits -->
+                        <h2 style="text-align: center; color: #333333; font-size: 24px; margin: 30px 0 20px 0;">
+                            Pourquoi Mystery Love Box ?
+                        </h2>
+                        
+                        <div class="benefits">
+                            <div class="benefit-item">
+                                <div class="benefit-icon">📦</div>
+                                <p class="benefit-text">
+                                    <strong>Mystère garanti</strong><br>
+                                    Chaque box est unique et soigneusement préparée pour surprendre
+                                </p>
+                            </div>
+                            
+                            <div class="benefit-item">
+                                <div class="benefit-icon">🚚</div>
+                                <p class="benefit-text">
+                                    <strong>Livraison rapide</strong><br>
+                                    Expédition sous 24-48h, livraison garantie pour la Saint-Valentin
+                                </p>
+                            </div>
+                            
+                            <div class="benefit-item">
+                                <div class="benefit-icon">💝</div>
+                                <p class="benefit-text">
+                                    <strong>Qualité premium</strong><br>
+                                    Des produits sélectionnés avec soin pour créer l'émotion parfaite
+                                </p>
+                            </div>
+                            
+                            <div class="benefit-item">
+                                <div class="benefit-icon">🎨</div>
+                                <p class="benefit-text">
+                                    <strong>Emballage raffiné</strong><br>
+                                    Une présentation élégante qui ajoute de la magie au déballage
+                                </p>
+                            </div>
+                            
+                            <div class="benefit-item">
+                                <div class="benefit-icon">💌</div>
+                                <p class="benefit-text">
+                                    <strong>Message personnalisé</strong><br>
+                                    Ajoutez une touche personnelle avec un message manuscrit
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- CTA Button -->
+                        <center>
+                            <a href="https://mystery-kdo.com/boutique" class="button">
+                                🛍️ Découvrir nos Box
+                            </a>
+                        </center>
+                        
+                        <div class="divider"></div>
+                        
+                        <p class="message">
+                            La Saint-Valentin approche à grands pas ! 💘 N'attendez pas pour réserver votre Mystery Love Box 
+                            et créer un moment magique que votre moitié n'oubliera jamais.
+                        </p>
+                        
+                        <p class="message">
+                            Si vous avez la moindre question, notre équipe est à votre écoute. 
+                            Nous sommes là pour vous aider à créer la surprise parfaite !
+                        </p>
+                        
+                        <p class="signature">
+                            Avec tout notre amour,<br>
+                            L'équipe Mystery Love Box 💕
+                        </p>
+                        
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        <p><strong>Besoin d'aide ?</strong></p>
+                        <p>
+                            📧 <a href="mailto:contact@mystery-kdo.com">contact@mystery-kdo.com</a><br>
+                            📞 +33 1 23 45 67 89<br>
+                            💬 <a href="https://mystery-kdo.com/faq">FAQ & Aide</a>
+                        </p>
+                        
+                        <div class="social-links">
+                            <a href="#" title="Facebook">📘</a>
+                            <a href="#" title="Instagram">📷</a>
+                            <a href="#" title="Twitter">🐦</a>
+                            <a href="#" title="Pinterest">📌</a>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <p style="font-size: 12px; color: #bbbbbb;">
+                            <strong>Mystery Love Box</strong><br>
+                            123 Rue de l'Amour, 75001 Paris, France<br>
+                            © 2026 Tous droits réservés
+                        </p>
+                        
+                        <p style="font-size: 11px; color: #cccccc; margin-top: 20px;">
+                            Vous recevez cet email car vous vous êtes inscrit(e) sur mystery-kdo.com<br>
+                            <a href="#" style="color: #cccccc;">Se désabonner</a>
+                        </p>
+                    </div>
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

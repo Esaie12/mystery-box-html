@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bientôt disponible - Mystery Love Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: linear-gradient(135deg, #fce7f3 0%, #fff1f2 50%, #ffe4e6 100%);
+            min-height: 100vh;
+        }
+        
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Pulse animation for hearts */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Countdown box styling */
+        .countdown-box {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Particles background */
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: float-particles 10s ease-in-out infinite;
+        }
+
+        @keyframes float-particles {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-50px) rotate(180deg);
+            }
+        }
+
+        /* Newsletter input focus */
+        .newsletter-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Floating heart particles -->
+    <div class="heart-particle" style="top: 10%; left: 10%;">💕</div>
+    <div class="heart-particle" style="top: 20%; right: 15%; animation-delay: 2s;">🌹</div>
+    <div class="heart-particle" style="top: 60%; left: 5%; animation-delay: 4s;">💝</div>
+    <div class="heart-particle" style="top: 70%; right: 10%; animation-delay: 1s;">✨</div>
+    <div class="heart-particle" style="top: 40%; left: 80%; animation-delay: 3s;">🎁</div>
+    <div class="heart-particle" style="top: 85%; left: 50%; animation-delay: 5s;">💖</div>
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="max-w-5xl w-full text-center">
+
+            <!-- Logo / Gift Icon -->
+            <div class="floating mb-8">
+                <div class="inline-block text-8xl pulse">🎁</div>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="font-playfair text-5xl md:text-7xl font-bold text-gray-900 mb-4">
+                Mystery Love Box
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-600 mb-8">
+                Quelque chose de <span class="gradient-text font-semibold">magique</span> arrive bientôt...
+            </p>
+
+            <!-- Countdown Timer -->
+            <div class="mb-12">
+                <h2 class="text-lg md:text-xl text-gray-500 mb-6 uppercase tracking-wide">Lancement dans</h2>
+                
+                <div class="flex justify-center gap-4 md:gap-8 flex-wrap">
+                    <!-- Days -->
+                    <div class="countdown-box">
+                        <div id="days" class="text-4xl md:text-6xl font-bold gradient-text mb-2">00</div>
+                        <div class="text-sm md:text-base text-gray-600 uppercase">Jours</div>
+                    </div>
+
+                    <!-- Hours -->
+                    <div class="countdown-box">
+                        <div id="hours" class="text-4xl md:text-6xl font-bold gradient-text mb-2">00</div>
+                        <div class="text-sm md:text-base text-gray-600 uppercase">Heures</div>
+                    </div>
+
+                    <!-- Minutes -->
+                    <div class="countdown-box">
+                        <div id="minutes" class="text-4xl md:text-6xl font-bold gradient-text mb-2">00</div>
+                        <div class="text-sm md:text-base text-gray-600 uppercase">Minutes</div>
+                    </div>
+
+                    <!-- Seconds -->
+                    <div class="countdown-box">
+                        <div id="seconds" class="text-4xl md:text-6xl font-bold gradient-text mb-2">00</div>
+                        <div class="text-sm md:text-base text-gray-600 uppercase">Secondes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="max-w-2xl mx-auto mb-12">
+                <p class="text-lg text-gray-700 mb-4">
+                    Préparez-vous à découvrir des <strong>coffrets cadeaux uniques</strong> qui feront battre le cœur de votre moitié 💕
+                </p>
+                <div class="flex justify-center gap-4 text-gray-600">
+                    <span class="flex items-center gap-2">
+                        <span class="text-2xl">🌹</span>
+                        <span>Box Galant</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <span class="text-2xl">💕</span>
+                        <span>Box Romantique</span>
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <span class="text-2xl">👑</span>
+                        <span>Box Le Boss</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Newsletter Signup -->
+            <div class="max-w-md mx-auto mb-12">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                    Soyez les premiers informés ! 📧
+                </h3>
+                <form class="flex flex-col sm:flex-row gap-3" onsubmit="handleSubmit(event)">
+                    <input 
+                        type="email" 
+                        id="emailInput"
+                        placeholder="votre@email.fr" 
+                        required
+                        class="newsletter-input flex-1 px-6 py-3 border-2 border-rose-300 rounded-lg text-gray-900 placeholder-gray-400 transition-all"
+                    >
+                    <button 
+                        type="submit"
+                        class="px-8 py-3 bg-gradient-to-r from-rose-600 to-red-700 text-white font-semibold rounded-lg hover:from-rose-500 hover:to-red-600 transition-all transform hover:scale-105 shadow-lg"
+                    >
+                        M'alerter
+                    </button>
+                </form>
+                <p id="successMessage" class="mt-3 text-green-600 font-medium hidden">
+                    ✓ Merci ! Vous serez informé(e) dès le lancement !
+                </p>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="mb-8">
+                <p class="text-gray-600 mb-4">Suivez-nous</p>
+                <div class="flex justify-center gap-6">
+                    <a href="#" class="text-3xl hover:scale-110 transition-transform">📘</a>
+                    <a href="#" class="text-3xl hover:scale-110 transition-transform">📷</a>
+                    <a href="#" class="text-3xl hover:scale-110 transition-transform">🐦</a>
+                    <a href="#" class="text-3xl hover:scale-110 transition-transform">💌</a>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-gray-500 text-sm">
+                <p>© 2026 Mystery Love Box - Créé avec ❤️</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Set the launch date - Change this to your desired launch date
+        // Format: "Month Day, Year Hour:Minute:Second"
+        const launchDate = new Date("February 14, 2026 00:00:00").getTime();
+
+        // Update countdown every second
+        const countdownInterval = setInterval(function() {
+            
+            // Get current date and time
+            const now = new Date().getTime();
+            
+            // Calculate the distance between now and launch date
+            const distance = launchDate - now;
+            
+            // Time calculations
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Display the countdown
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+            
+            // If countdown is finished
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                
+                // You can redirect to the main site or show a message
+                // window.location.href = "index.html";
+            }
+            
+        }, 1000);
+
+        // Newsletter form handler
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            
+            // Here you would normally send the email to your backend/database
+            console.log('Email submitted:', email);
+            
+            // Show success message
+            document.getElementById('successMessage').classList.remove('hidden');
+            
+            // Clear the input
+            document.getElementById('emailInput').value = '';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
