@@ -1,532 +1,420 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finaliser ma commande - Mystery Love Box</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Raleway', sans-serif;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mystery Box Global — Commander</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',500:'#14b8a6',600:'#0d9488',700:'#0f766e' },
+            sage: { 500:'#5c735c',600:'#485c48' },
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"','serif'],
+            sans: ['"DM Sans"','sans-serif'],
+          }
         }
-        .font-playfair {
-            font-family: 'Playfair Display', serif;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        
-        .hearts-bg {
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(190, 18, 60, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(239, 68, 68, 0.05) 0%, transparent 50%);
-        }
-
-        .mobile-menu {
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-        
-        .mobile-menu.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Sticky summary on desktop */
-        @media (min-width: 1024px) {
-            .sticky-summary {
-                position: sticky;
-                top: 2rem;
-            }
-        }
-    </style>
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('active');
-        }
-
-        // Update summary dynamically
-        function updateSummary() {
-            const recipientName = document.getElementById('recipient-name').value || 'Non renseigné';
-            const recipientSex = document.getElementById('recipient-sex').value || 'Non renseigné';
-            const message = document.getElementById('message').value || 'Aucun message';
-            const anonymous = document.getElementById('anonymous').checked ? 'Oui' : 'Non';
-            const phone = document.getElementById('phone').value || 'Non renseigné';
-            const address = document.getElementById('address').value || 'Non renseigné';
-
-            document.getElementById('summary-name').textContent = recipientName;
-            document.getElementById('summary-sex').textContent = recipientSex;
-            document.getElementById('summary-message').textContent = message;
-            document.getElementById('summary-anonymous').textContent = anonymous;
-            document.getElementById('summary-phone').textContent = phone;
-            document.getElementById('summary-address').textContent = address;
-        }
-
-        // Get category from URL parameter
-        window.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const category = urlParams.get('category') || 'Romantique';
-            document.getElementById('category-name').textContent = category;
-            document.getElementById('summary-category').textContent = category;
-
-            // Set category icon and color
-            const categoryIcons = {
-                'Galant': '🌹',
-                'Romantique': '💕',
-                'Le Boss': '👑'
-            };
-            document.getElementById('category-icon').textContent = categoryIcons[category] || '💝';
-
-            // Add event listeners for real-time updates
-            document.getElementById('recipient-name').addEventListener('input', updateSummary);
-            document.getElementById('recipient-sex').addEventListener('change', updateSummary);
-            document.getElementById('message').addEventListener('input', updateSummary);
-            document.getElementById('anonymous').addEventListener('change', updateSummary);
-            document.getElementById('phone').addEventListener('input', updateSummary);
-            document.getElementById('address').addEventListener('input', updateSummary);
-        });
-    </script>
+      }
+    }
+  </script>
+  <style>
+    body { font-family:'DM Sans',sans-serif; background:#f8fafc; }
+    .font-serif { font-family:'Playfair Display',serif; }
+    .nav-link { position:relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#14b8a6; transition:width .3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .form-input {
+      width:100%; padding:.625rem .875rem; border:1.5px solid #e2e8f0; border-radius:.75rem;
+      font-size:.875rem; outline:none; transition:border-color .2s, box-shadow .2s;
+      background:white; color:#1e293b;
+    }
+    .form-input:focus { border-color:#14b8a6; box-shadow:0 0 0 3px rgba(20,184,166,.12); }
+    .form-input::placeholder { color:#94a3b8; }
+    .form-label { display:block; font-size:.8125rem; font-weight:600; color:#475569; margin-bottom:.375rem; letter-spacing:.01em; }
+    .form-select {
+      width:100%; padding:.625rem .875rem; border:1.5px solid #e2e8f0; border-radius:.75rem;
+      font-size:.875rem; outline:none; transition:border-color .2s; background:white; color:#1e293b;
+      appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right .75rem center; background-size:1rem;
+      padding-right:2.5rem;
+    }
+    .form-select:focus { border-color:#14b8a6; box-shadow:0 0 0 3px rgba(20,184,166,.12); }
+    .form-textarea { resize:vertical; min-height:90px; }
+    .summary-card { background:white; border-radius:1.25rem; border:1.5px solid #e2e8f0; }
+    .step-indicator { display:flex; align-items:center; gap:.5rem; }
+    .step-dot { width:2rem; height:2rem; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; }
+    .step-active { background:#14b8a6; color:white; }
+    .step-done { background:#ccfbf1; color:#0d9488; }
+    .step-pending { background:#f1f5f9; color:#94a3b8; }
+    .step-line { flex:1; height:2px; background:#e2e8f0; }
+    .fade-in { animation:fadeIn .6s ease forwards; opacity:0; }
+    @keyframes fadeIn { to { opacity:1; } }
+    .checkbox-custom { width:1.1rem; height:1.1rem; border-radius:.35rem; border:2px solid #cbd5e1; accent-color:#14b8a6; cursor:pointer; }
+    .checkbox-custom:checked { border-color:#14b8a6; }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-rose-950 via-red-900 to-pink-900 min-h-screen text-white hearts-bg">
-    
-    <!-- Header -->
-    <header class="container mx-auto px-4 py-6">
-        <nav class="flex justify-between items-center mb-6">
-            <a href="categories.html" class="text-rose-200 hover:text-rose-100 transition-colors flex items-center gap-2 font-medium">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-                <span class="hidden sm:inline">Retour</span>
-            </a>
-            
-            <h1 class="font-playfair text-2xl md:text-4xl font-bold bg-gradient-to-r from-pink-200 via-rose-300 to-red-200 bg-clip-text text-transparent">
-                Mystery Love Box
-            </h1>
-            
-            <div class="hidden md:flex items-center gap-4">
-                <a href="login.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
-                    🔐 Connexion
-                </a>
-                <a href="contact.html" class="text-rose-200 hover:text-white transition-colors duration-300 text-sm font-medium">
-                    💬 Contact
-                </a>
-            </div>
+<body class="text-slate-800">
 
-            <button onclick="toggleMobileMenu()" class="md:hidden text-rose-200 hover:text-white p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-sage-600 flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V11"/></svg>
+          </div>
+          <span class="font-serif font-semibold text-slate-800 text-lg leading-tight">Mystery Box<br><span class="text-xs font-sans font-normal text-slate-400 tracking-widest uppercase" style="font-size:9px;letter-spacing:.12em;">Global</span></span>
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="nav-link text-sm font-medium text-slate-700 hover:text-teal-600 transition-colors">Accueil</a>
+          <a href="index.html#occasions" class="nav-link text-sm font-medium text-slate-700 hover:text-teal-600 transition-colors">Occasions</a>
+          <a href="contact.html" class="nav-link text-sm font-medium text-slate-700 hover:text-teal-600 transition-colors">Contact</a>
         </nav>
-
-        <div id="mobileMenu" class="mobile-menu bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-rose-300/30">
-            <div class="flex flex-col gap-4">
-                <a href="login.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2 border-b border-rose-300/20">
-                    🔐 Connexion
-                </a>
-                <a href="contact.html" class="text-rose-200 hover:text-white transition-colors duration-300 font-medium py-2">
-                    💬 Contact
-                </a>
-            </div>
+        <div class="flex items-center gap-3">
+          <a href="#" class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-all">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            Connexion
+          </a>
+          <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+            <svg class="w-5 h-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
         </div>
-    </header>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3">
+      <a href="index.html" class="block text-sm text-slate-700 py-2">Accueil</a>
+      <a href="index.html#occasions" class="block text-sm text-slate-700 py-2">Occasions</a>
+      <a href="contact.html" class="block text-sm text-slate-700 py-2">Contact</a>
+      <a href="#" class="block text-sm text-slate-700 py-2">Connexion</a>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <div class="max-w-7xl mx-auto">
-            
-            <!-- Page Title -->
-            <div class="text-center mb-8 animate-fade-in-up">
-                <h2 class="font-playfair text-3xl md:text-5xl font-bold mb-3">
-                    Finalisez votre commande
-                </h2>
-                <p class="text-rose-200 text-lg">
-                    Quelques informations pour livrer votre cadeau mystère
-                </p>
+  <!-- BREADCRUMB + STEPS -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <nav class="flex items-center gap-2 text-sm text-slate-400 mb-6">
+      <a href="index.html" class="hover:text-teal-600">Accueil</a>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <a id="breadcrumb-occasion" href="#" class="hover:text-teal-600">Occasion</a>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <span class="text-slate-600 font-medium">Personnalisation</span>
+    </nav>
+
+    <!-- Step indicator -->
+    <div class="flex items-center gap-2 mb-10 max-w-xs">
+      <div class="step-dot step-done">✓</div>
+      <div class="step-line"></div>
+      <div class="step-dot step-active">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot step-pending">3</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="lg:grid lg:grid-cols-3 lg:gap-10">
+
+      <!-- FORM (left, 2 cols) -->
+      <div class="lg:col-span-2">
+        <div class="fade-in mb-8">
+          <p class="text-teal-600 text-sm font-semibold uppercase tracking-widest mb-2">Étape 2 sur 3</p>
+          <h1 class="font-serif text-3xl lg:text-4xl font-bold text-slate-800">Personnalisez votre box</h1>
+          <p class="text-slate-500 mt-2">Renseignez les informations du destinataire et votre message.</p>
+        </div>
+
+        <form id="checkoutForm" class="space-y-6" novalidate>
+
+          <!-- Section: Destinataire -->
+          <div class="bg-white rounded-2xl border border-slate-100 p-6 fade-in" style="animation-delay:.1s">
+            <h2 class="font-semibold text-slate-800 mb-5 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs font-bold">1</span>
+              Informations du destinataire
+            </h2>
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="destinataire" class="form-label">Nom du destinataire <span class="text-red-400">*</span></label>
+                <input id="destinataire" type="text" class="form-input" placeholder="Prénom Nom" required autocomplete="name">
+              </div>
+              <div>
+                <label for="sexe" class="form-label">Sexe du destinataire <span class="text-red-400">*</span></label>
+                <select id="sexe" class="form-select" required>
+                  <option value="" disabled selected>Sélectionnez</option>
+                  <option value="homme">Homme</option>
+                  <option value="femme">Femme</option>
+                  <option value="enfant">Enfant</option>
+                  <option value="non-binaire">Non-binaire / Autre</option>
+                </select>
+              </div>
             </div>
+          </div>
 
-            <div class="grid lg:grid-cols-3 gap-8">
-                
-                <!-- LEFT: Form Section -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 md:p-8 border border-rose-300/30 shadow-2xl animate-fade-in-up">
-                        
-                        <!-- Category Badge -->
-                        <div class="flex items-center gap-3 mb-6 pb-6 border-b border-rose-300/30">
-                            <div class="text-4xl" id="category-icon">💕</div>
-                            <div>
-                                <p class="text-rose-300 text-sm font-medium">Catégorie sélectionnée</p>
-                                <h3 class="font-playfair text-2xl font-bold" id="category-name">Romantique</h3>
-                            </div>
-                        </div>
-
-                        <!-- Form -->
-                        <form class="space-y-6">
-                            
-                            <!-- Section 1: Recipient Info -->
-                            <div>
-                                <h4 class="font-playfair text-xl font-bold mb-4 text-rose-200">
-                                    👤 Informations du destinataire
-                                </h4>
-                                
-                                <!-- Recipient Name -->
-                                <div class="mb-4">
-                                    <label for="recipient-name" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Nom du destinataire *
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        id="recipient-name" 
-                                        placeholder="Ex: Marie Dupont"
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white placeholder-rose-300/50 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300"
-                                        required
-                                    >
-                                </div>
-
-                                <!-- Recipient Sex -->
-                                <div class="mb-4">
-                                    <label for="recipient-sex" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Sexe *
-                                    </label>
-                                    <select 
-                                        id="recipient-sex"
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300"
-                                        required
-                                    >
-                                        <option value="" class="bg-rose-950">Sélectionnez</option>
-                                        <option value="Femme" class="bg-rose-950">Femme</option>
-                                        <option value="Homme" class="bg-rose-950">Homme</option>
-                                        <option value="Autre" class="bg-rose-950">Autre</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Section 2: Message -->
-                            <div>
-                                <h4 class="font-playfair text-xl font-bold mb-4 text-rose-200">
-                                    💌 Message personnalisé
-                                </h4>
-                                
-                                <!-- Pre-written messages -->
-                                <div class="mb-4">
-                                    <label class="block text-rose-200 text-sm font-medium mb-2">
-                                        Choisir un message (optionnel)
-                                    </label>
-                                    <div class="grid md:grid-cols-2 gap-3">
-                                        <button 
-                                            type="button"
-                                            onclick="document.getElementById('message').value = 'Je t\'aime plus que tout au monde ❤️'"
-                                            class="px-4 py-3 bg-white/5 hover:bg-white/10 border border-rose-300/30 
-                                                   rounded-xl text-rose-200 text-sm transition-all duration-300 text-left"
-                                        >
-                                            💕 "Je t'aime plus que tout au monde"
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            onclick="document.getElementById('message').value = 'Tu es la personne la plus précieuse à mes yeux 🌹'"
-                                            class="px-4 py-3 bg-white/5 hover:bg-white/10 border border-rose-300/30 
-                                                   rounded-xl text-rose-200 text-sm transition-all duration-300 text-left"
-                                        >
-                                            🌹 "Tu es la personne la plus précieuse"
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            onclick="document.getElementById('message').value = 'Joyeuse Saint-Valentin mon amour 💝'"
-                                            class="px-4 py-3 bg-white/5 hover:bg-white/10 border border-rose-300/30 
-                                                   rounded-xl text-rose-200 text-sm transition-all duration-300 text-left"
-                                        >
-                                            💝 "Joyeuse Saint-Valentin"
-                                        </button>
-                                        <button 
-                                            type="button"
-                                            onclick="document.getElementById('message').value = 'Merci d\'être dans ma vie ✨'"
-                                            class="px-4 py-3 bg-white/5 hover:bg-white/10 border border-rose-300/30 
-                                                   rounded-xl text-rose-200 text-sm transition-all duration-300 text-left"
-                                        >
-                                            ✨ "Merci d'être dans ma vie"
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Custom message -->
-                                <div class="mb-4">
-                                    <label for="message" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Ou écrivez votre propre message
-                                    </label>
-                                    <textarea 
-                                        id="message" 
-                                        rows="4"
-                                        placeholder="Votre message personnalisé..."
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white placeholder-rose-300/50 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300 resize-none"
-                                    ></textarea>
-                                    <p class="text-rose-300/70 text-xs mt-1">Maximum 200 caractères</p>
-                                </div>
-
-                                <!-- Anonymous option -->
-                                <div class="flex items-start gap-3">
-                                    <input 
-                                        type="checkbox" 
-                                        id="anonymous" 
-                                        class="mt-1 rounded accent-rose-500"
-                                    >
-                                    <label for="anonymous" class="text-sm text-rose-200">
-                                        🎭 Rester anonyme (le destinataire ne saura pas qui a envoyé le cadeau)
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Section 3: Delivery Info -->
-                            <div>
-                                <h4 class="font-playfair text-xl font-bold mb-4 text-rose-200">
-                                    📍 Informations de livraison
-                                </h4>
-                                
-                                <!-- Phone -->
-                                <div class="mb-4">
-                                    <label for="phone" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Numéro de téléphone *
-                                    </label>
-                                    <input 
-                                        type="tel" 
-                                        id="phone" 
-                                        placeholder="+33 6 12 34 56 78"
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white placeholder-rose-300/50 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300"
-                                        required
-                                    >
-                                </div>
-
-                                <!-- Address -->
-                                <div class="mb-4">
-                                    <label for="address" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Adresse complète *
-                                    </label>
-                                    <textarea 
-                                        id="address" 
-                                        rows="3"
-                                        placeholder="Numéro, rue, code postal, ville, pays"
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white placeholder-rose-300/50 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300 resize-none"
-                                        required
-                                    ></textarea>
-                                </div>
-
-                                <!-- Delivery date -->
-                                <div class="mb-4">
-                                    <label for="delivery-date" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Date de livraison souhaitée *
-                                    </label>
-                                    <input 
-                                        type="date" 
-                                        id="delivery-date" 
-                                        min="2026-02-10"
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300"
-                                        required
-                                    >
-                                </div>
-
-                                <!-- Delivery instructions -->
-                                <div class="mb-4">
-                                    <label for="delivery-instructions" class="block text-rose-200 text-sm font-medium mb-2">
-                                        Instructions de livraison (optionnel)
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        id="delivery-instructions" 
-                                        placeholder="Ex: Sonner chez le voisin si absent"
-                                        class="w-full px-4 py-3 rounded-xl bg-white/5 border border-rose-300/30 
-                                               text-white placeholder-rose-300/50 
-                                               focus:outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-400/50
-                                               transition-all duration-300"
-                                    >
-                                </div>
-                            </div>
-
-                            <!-- Mobile: Pay button (visible only on mobile) -->
-                            <div class="lg:hidden mt-8">
-                                <button 
-                                    type="submit"
-                                    class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 
-                                           text-white font-semibold py-4 rounded-xl transition-all duration-300 
-                                           transform hover:scale-105 shadow-lg hover:shadow-xl text-lg"
-                                >
-                                    💳 Payer 49,99 €
-                                </button>
-                            </div>
-
-                        </form>
-
-                    </div>
+          <!-- Section: Message -->
+          <div class="bg-white rounded-2xl border border-slate-100 p-6 fade-in" style="animation-delay:.2s">
+            <h2 class="font-semibold text-slate-800 mb-5 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs font-bold">2</span>
+              Message & options
+            </h2>
+            <div class="space-y-5">
+              <div>
+                <label for="message" class="form-label">Message personnalisé</label>
+                <textarea id="message" class="form-input form-textarea" placeholder="Écrivez votre message (facultatif)…" maxlength="300"></textarea>
+                <p class="text-xs text-slate-400 mt-1"><span id="charCount">0</span>/300 caractères</p>
+              </div>
+              <label class="flex items-start gap-3 cursor-pointer group">
+                <input id="anonyme" type="checkbox" class="checkbox-custom mt-0.5">
+                <div>
+                  <span class="text-sm font-medium text-slate-700">Envoi anonyme</span>
+                  <p class="text-xs text-slate-400 mt-0.5">Votre identité ne sera pas révélée au destinataire.</p>
                 </div>
-
-                <!-- RIGHT: Summary Section -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-6 border border-rose-300/30 shadow-2xl sticky-summary animate-fade-in-up delay-100">
-                        
-                        <h3 class="font-playfair text-2xl font-bold mb-6 text-center">
-                            Récapitulatif
-                        </h3>
-
-                        <!-- Category -->
-                        <div class="mb-6 pb-6 border-b border-rose-300/30">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-rose-300 text-sm">Catégorie</span>
-                                <span class="text-white font-semibold" id="summary-category">Romantique</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-rose-300 text-sm">Prix</span>
-                                <span class="text-white font-semibold">49,99 €</span>
-                            </div>
-                        </div>
-
-                        <!-- Recipient Info -->
-                        <div class="space-y-3 mb-6">
-                            <h4 class="font-semibold text-rose-200 text-sm uppercase tracking-wider">
-                                Destinataire
-                            </h4>
-                            
-                            <div class="bg-white/5 rounded-xl p-3">
-                                <p class="text-rose-300 text-xs mb-1">Nom</p>
-                                <p class="text-white" id="summary-name">Non renseigné</p>
-                            </div>
-
-                            <div class="bg-white/5 rounded-xl p-3">
-                                <p class="text-rose-300 text-xs mb-1">Sexe</p>
-                                <p class="text-white" id="summary-sex">Non renseigné</p>
-                            </div>
-
-                            <div class="bg-white/5 rounded-xl p-3">
-                                <p class="text-rose-300 text-xs mb-1">Message</p>
-                                <p class="text-white text-sm italic" id="summary-message">Aucun message</p>
-                            </div>
-
-                            <div class="bg-white/5 rounded-xl p-3">
-                                <p class="text-rose-300 text-xs mb-1">Anonyme</p>
-                                <p class="text-white" id="summary-anonymous">Non</p>
-                            </div>
-                        </div>
-
-                        <!-- Delivery Info -->
-                        <div class="space-y-3 mb-6 pb-6 border-b border-rose-300/30">
-                            <h4 class="font-semibold text-rose-200 text-sm uppercase tracking-wider">
-                                Livraison
-                            </h4>
-                            
-                            <div class="bg-white/5 rounded-xl p-3">
-                                <p class="text-rose-300 text-xs mb-1">Téléphone</p>
-                                <p class="text-white text-sm" id="summary-phone">Non renseigné</p>
-                            </div>
-
-                            <div class="bg-white/5 rounded-xl p-3">
-                                <p class="text-rose-300 text-xs mb-1">Adresse</p>
-                                <p class="text-white text-sm" id="summary-address">Non renseigné</p>
-                            </div>
-                        </div>
-
-                        <!-- Total -->
-                        <div class="mb-6">
-                            <div class="flex justify-between items-center text-lg mb-2">
-                                <span class="text-rose-200">Sous-total</span>
-                                <span class="text-white font-semibold">49,99 €</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm mb-4">
-                                <span class="text-rose-300">Livraison</span>
-                                <span class="text-green-300 font-semibold">Gratuite</span>
-                            </div>
-                            <div class="flex justify-between items-center text-xl font-bold pt-4 border-t border-rose-300/30">
-                                <span class="text-white">Total</span>
-                                <span class="text-white">49,99 €</span>
-                            </div>
-                        </div>
-
-                        <!-- Pay Button (visible only on desktop) -->
-                        <div class="hidden lg:block">
-                            <button 
-                                type="submit"
-                                class="w-full bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 
-                                       text-white font-semibold py-4 rounded-xl transition-all duration-300 
-                                       transform hover:scale-105 shadow-lg hover:shadow-xl text-lg"
-                            >
-                                💳 Payer maintenant
-                            </button>
-                        </div>
-
-                        <!-- Trust badges -->
-                        <div class="mt-6 space-y-2">
-                            <div class="flex items-center gap-2 text-rose-200 text-xs">
-                                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                Paiement 100% sécurisé
-                            </div>
-                            <div class="flex items-center gap-2 text-rose-200 text-xs">
-                                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                Livraison garantie
-                            </div>
-                            <div class="flex items-center gap-2 text-rose-200 text-xs">
-                                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                Satisfaction garantie
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
+              </label>
             </div>
+          </div>
 
+          <!-- Section: Livraison -->
+          <div class="bg-white rounded-2xl border border-slate-100 p-6 fade-in" style="animation-delay:.3s">
+            <h2 class="font-semibold text-slate-800 mb-5 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs font-bold">3</span>
+              Adresse de livraison
+            </h2>
+            <div class="space-y-5">
+              <div>
+                <label for="telephone" class="form-label">Téléphone <span class="text-red-400">*</span></label>
+                <input id="telephone" type="tel" class="form-input" placeholder="+33 6 00 00 00 00" required autocomplete="tel">
+              </div>
+              <div>
+                <label for="adresse" class="form-label">Adresse complète <span class="text-red-400">*</span></label>
+                <input id="adresse" type="text" class="form-input" placeholder="Numéro, rue, appartement…" required autocomplete="street-address">
+              </div>
+              <div class="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label for="ville" class="form-label">Ville <span class="text-red-400">*</span></label>
+                  <input id="ville" type="text" class="form-input" placeholder="Paris" required autocomplete="address-level2">
+                </div>
+                <div>
+                  <label for="codepostal" class="form-label">Code postal <span class="text-red-400">*</span></label>
+                  <input id="codepostal" type="text" class="form-input" placeholder="75001" required>
+                </div>
+              </div>
+              <div>
+                <label for="pays" class="form-label">Pays <span class="text-red-400">*</span></label>
+                <select id="pays" class="form-select" required autocomplete="country">
+                  <option value="" disabled selected>Sélectionnez</option>
+                  <option value="FR">France</option>
+                  <option value="BE">Belgique</option>
+                  <option value="CH">Suisse</option>
+                  <option value="CA">Canada</option>
+                  <option value="MA">Maroc</option>
+                  <option value="DZ">Algérie</option>
+                  <option value="TN">Tunisie</option>
+                  <option value="OTHER">Autre pays</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Validation Message -->
+          <div id="formError" class="hidden bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-600 flex items-center gap-2">
+            <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            Merci de remplir tous les champs obligatoires.
+          </div>
+
+          <!-- Submit Button (Mobile — shown below form, before summary) -->
+          <div class="lg:hidden">
+            <button type="submit" id="submitBtn" class="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-teal-600 text-white font-semibold text-sm hover:bg-teal-700 transition-all shadow-lg shadow-teal-200">
+              Continuer vers le paiement
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </button>
+            <p class="text-center text-xs text-slate-400 mt-3">🔒 Paiement sécurisé · SSL chiffré</p>
+          </div>
+        </form>
+      </div>
+
+      <!-- SUMMARY PANEL (right, sticky) -->
+      <div class="lg:col-span-1 mt-10 lg:mt-0">
+        <div class="summary-card p-6 sticky top-24 fade-in" style="animation-delay:.4s">
+          <h2 class="font-serif font-semibold text-slate-800 text-lg mb-5">Récapitulatif</h2>
+
+          <div class="bg-gradient-to-br from-teal-50 to-slate-50 rounded-xl p-4 mb-5 border border-teal-100">
+            <div class="flex items-center gap-3 mb-3">
+              <span id="sum-icon" class="text-3xl">🎁</span>
+              <div>
+                <div id="sum-occasion" class="font-semibold text-slate-800 text-sm">—</div>
+                <div id="sum-categorie" class="text-teal-600 text-xs font-medium">—</div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-3 border-t border-teal-100/50">
+              <span class="text-sm text-slate-500">Prix de la box</span>
+              <span id="sum-prix" class="font-serif font-bold text-slate-800 text-lg">—</span>
+            </div>
+          </div>
+
+          <!-- Live fields summary -->
+          <div class="space-y-3 mb-6" id="liveFields">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-slate-400">Destinataire</span>
+              <span id="sum-destinataire" class="text-slate-700 font-medium text-right max-w-32 truncate">—</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-slate-400">Sexe</span>
+              <span id="sum-sexe" class="text-slate-700 font-medium">—</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-slate-400">Envoi anonyme</span>
+              <span id="sum-anonyme" class="text-slate-700 font-medium">Non</span>
+            </div>
+            <div class="flex items-start justify-between text-sm gap-2">
+              <span class="text-slate-400 shrink-0">Message</span>
+              <span id="sum-message" class="text-slate-700 font-medium text-right text-xs italic max-w-36 line-clamp-2">—</span>
+            </div>
+            <div class="flex items-start justify-between text-sm gap-2">
+              <span class="text-slate-400 shrink-0">Livraison</span>
+              <span id="sum-adresse" class="text-slate-700 font-medium text-right text-xs max-w-36 line-clamp-2">—</span>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-100 pt-4 mb-5">
+            <div class="flex items-center justify-between mb-2 text-sm">
+              <span class="text-slate-500">Sous-total</span>
+              <span id="sum-subtotal" class="text-slate-700">—</span>
+            </div>
+            <div class="flex items-center justify-between mb-2 text-sm">
+              <span class="text-slate-500">Livraison</span>
+              <span class="text-teal-600 font-medium">Calculée à l'étape suivante</span>
+            </div>
+            <div class="flex items-center justify-between font-semibold text-slate-800 mt-3 pt-3 border-t border-slate-100">
+              <span>Total estimé</span>
+              <span id="sum-total" class="font-serif text-xl">—</span>
+            </div>
+          </div>
+
+          <!-- Desktop CTA -->
+          <button type="submit" form="checkoutForm" id="submitBtnDesktop" class="hidden lg:flex w-full items-center justify-center gap-2 py-3.5 rounded-xl bg-teal-600 text-white font-semibold text-sm hover:bg-teal-700 transition-all shadow-lg shadow-teal-200">
+            Continuer vers le paiement
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </button>
+          <p class="text-center text-xs text-slate-400 mt-3">🔒 Paiement sécurisé · SSL chiffré</p>
+
+          <!-- Trust badges -->
+          <div class="mt-5 pt-5 border-t border-slate-100 grid grid-cols-3 gap-2 text-center">
+            <div class="text-xs text-slate-400">
+              <div class="text-base mb-1">🔒</div>
+              Sécurisé
+            </div>
+            <div class="text-xs text-slate-400">
+              <div class="text-base mb-1">📦</div>
+              Suivi offert
+            </div>
+            <div class="text-xs text-slate-400">
+              <div class="text-base mb-1">↩️</div>
+              SAV réactif
+            </div>
+          </div>
         </div>
-    </main>
+      </div>
+    </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="container mx-auto px-4 py-12 mt-20 border-t border-rose-300/20">
-        <div class="text-center text-rose-200/60">
-            <p class="mb-2">© 2026 Mystery Love Box - Tous droits réservés</p>
-            <p class="text-sm">Créé avec ❤️ pour la Saint-Valentin</p>
-        </div>
-    </footer>
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 py-10">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+      © 2025 Mystery Box Global. Tous droits réservés.
+      <span class="mx-2">·</span>
+      <a href="contact.html" class="hover:text-teal-400">Contact</a>
+    </div>
+  </footer>
 
+  <script>
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    // Parse query params
+    const params = new URLSearchParams(window.location.search);
+    const occasion = params.get('occasion') || '';
+    const categorie = params.get('categorie') || '';
+    const categorieNom = params.get('nom') || categorie;
+    const prix = params.get('prix') || '—';
+
+    const occasionLabels = {
+      noel:'Noël 🎄', ramadan:'Ramadan 🌙', anniversaire:'Anniversaire 🎂',
+      'fete-peres':'Fête des Pères 👨‍👧', 'fete-meres':'Fête des Mères 💐',
+      mariage:'Mariage 💍', diplome:'Remise de diplôme 🎓', naissance:'Naissance 👶'
+    };
+    const occasionIcons = {
+      noel:'🎄', ramadan:'🌙', anniversaire:'🎂', 'fete-peres':'👨‍👧',
+      'fete-meres':'💐', mariage:'💍', diplome:'🎓', naissance:'👶'
+    };
+
+    const dispOccasion = occasionLabels[occasion] || occasion || 'Occasion';
+    const dispIcon = occasionIcons[occasion] || '🎁';
+
+    document.getElementById('sum-icon').textContent = dispIcon;
+    document.getElementById('sum-occasion').textContent = dispOccasion;
+    document.getElementById('sum-categorie').textContent = 'Catégorie ' + (categorieNom || '—');
+    document.getElementById('sum-prix').textContent = prix;
+    document.getElementById('sum-subtotal').textContent = prix;
+    document.getElementById('sum-total').textContent = prix;
+
+    // Update breadcrumb
+    const bcLink = document.getElementById('breadcrumb-occasion');
+    bcLink.textContent = occasionLabels[occasion] || 'Occasion';
+    bcLink.href = `occasion.html?occasion=${occasion}`;
+
+    // Live field updates
+    function live(id, summaryId, transform) {
+      const el = document.getElementById(id);
+      const sum = document.getElementById(summaryId);
+      if (!el || !sum) return;
+      el.addEventListener('input', () => { sum.textContent = transform ? transform(el.value) : (el.value || '—'); });
+      el.addEventListener('change', () => { sum.textContent = transform ? transform(el.value) : (el.value || '—'); });
+    }
+
+    live('destinataire', 'sum-destinataire');
+    live('sexe', 'sum-sexe', v => ({ homme:'Homme', femme:'Femme', enfant:'Enfant', 'non-binaire':'Autre' }[v] || '—'));
+    live('message', 'sum-message', v => v.trim() || '—');
+
+    document.getElementById('anonyme').addEventListener('change', e => {
+      document.getElementById('sum-anonyme').textContent = e.target.checked ? 'Oui ✓' : 'Non';
+    });
+
+    // Live address
+    ['adresse','ville','codepostal','pays'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateAddr);
+      document.getElementById(id).addEventListener('change', updateAddr);
+    });
+    function updateAddr() {
+      const a = document.getElementById('adresse').value;
+      const v = document.getElementById('ville').value;
+      const cp = document.getElementById('codepostal').value;
+      const parts = [a, cp && v ? `${cp} ${v}` : (cp || v)].filter(Boolean);
+      document.getElementById('sum-adresse').textContent = parts.join(', ') || '—';
+    }
+
+    // Char counter
+    document.getElementById('message').addEventListener('input', function() {
+      document.getElementById('charCount').textContent = this.value.length;
+    });
+
+    // Form submit
+    document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const required = ['destinataire','sexe','telephone','adresse','ville','codepostal','pays'];
+      let valid = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.style.borderColor = '#ef4444'; valid = false; }
+        else { el.style.borderColor = ''; }
+      });
+      const errDiv = document.getElementById('formError');
+      if (!valid) { errDiv.classList.remove('hidden'); errDiv.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+      errDiv.classList.add('hidden');
+      // MVP: redirect to confirmation page (placeholder)
+      alert('✅ Commande prête ! (Redirection vers le paiement — à connecter au backend)');
+    });
+  </script>
 </body>
 </html>
