@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mystery Box Global — Mon Compte</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:     #0d9488;
+      --teal-l:   #14b8a6;
+      --teal-xl:  #f0fdfa;
+      --teal-mid: #ccfbf1;
+      --ink:      #0f172a;
+      --ink2:     #1e293b;
+      --muted:    #64748b;
+      --border:   #e2e8f0;
+      --bg:       #f8fafc;
+      --white:    #ffffff;
+      --amber:    #f59e0b;
+      --amber-bg: #fffbeb;
+      --red:      #ef4444;
+      --green:    #10b981;
+      --gold:     #d97706;
+      --gold-bg:  #fef3c7;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════ */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      height: 64px;
+      display: flex; align-items: center;
+      padding: 0 28px;
+      gap: 16px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .nav-logo {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .nav-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px; font-weight: 700; color: var(--ink);
+    }
+    .nav-sep { flex: 1; }
+    .nav-links {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-tab {
+      padding: 7px 14px; border-radius: 9px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      border: none; background: transparent; color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s; text-decoration: none;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-tab svg { width: 14px; height: 14px; }
+    .nav-tab:hover { color: var(--ink); background: var(--bg); }
+    .nav-tab.active { color: var(--teal); background: var(--teal-xl); }
+    .nav-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; font-weight: 700; color: white;
+      cursor: pointer; flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(13,148,136,0.3);
+    }
+
+    /* Mobile nav */
+    @media(max-width: 640px) {
+      .nav-links { display: none; }
+    }
+
+    /* ═══════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════ */
+    .page-wrap {
+      max-width: 1100px; margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    /* ═══════════════════════════════════════
+       PROFILE HERO
+    ═══════════════════════════════════════ */
+    .profile-hero {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      animation: slideUp 0.5s ease forwards;
+    }
+    .hero-banner {
+      height: 96px;
+      background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 50%, #f0fdfa 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 50%, rgba(20,184,166,0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 50%, rgba(14,165,133,0.1) 0%, transparent 60%);
+    }
+    /* Subtle grid pattern */
+    .hero-banner::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(20,184,166,0.05) 24px, rgba(20,184,166,0.05) 25px),
+        repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(20,184,166,0.05) 24px, rgba(20,184,166,0.05) 25px);
+    }
+    .hero-body {
+      padding: 0 28px 24px;
+      display: flex; align-items: flex-end; gap: 20px;
+      flex-wrap: wrap;
+    }
+    .avatar-ring {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 700; color: white;
+      border: 4px solid var(--white);
+      margin-top: -40px; position: relative; z-index: 1;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(13,148,136,0.3);
+    }
+    .hero-info { flex: 1; min-width: 180px; padding-top: 12px; }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--ink);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .member-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--gold-bg); color: var(--gold);
+      border: 1px solid rgba(217,119,6,0.2);
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 700;
+    }
+    .hero-stats {
+      display: flex; gap: 0;
+      margin-left: auto;
+    }
+    .hstat {
+      padding: 12px 20px; text-align: center;
+      border-left: 1px solid var(--border);
+    }
+    .hstat:first-child { border-left: none; }
+    .hstat-v {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700; color: var(--ink);
+    }
+    .hstat-l { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+    @media(max-width: 700px) { .hero-stats { display: none; } }
+
+    /* ═══════════════════════════════════════
+       TABS
+    ═══════════════════════════════════════ */
+    .tabs {
+      display: flex; gap: 4px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      margin-bottom: 24px;
+      animation: slideUp 0.5s 0.05s ease both;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex: 1; padding: 10px 16px; border-radius: 10px; border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px; font-weight: 600; cursor: pointer;
+      color: var(--muted); background: transparent;
+      transition: all 0.2s ease; white-space: nowrap;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      min-width: 110px;
+    }
+    .tab-btn svg { width: 15px; height: 15px; }
+    .tab-btn:hover { color: var(--ink); background: var(--bg); }
+    .tab-btn.active { color: var(--teal); background: var(--teal-xl); }
+    .tab-badge {
+      background: var(--teal); color: white;
+      font-size: 10px; font-weight: 700; padding: 2px 7px;
+      border-radius: 999px; min-width: 18px; text-align: center;
+    }
+
+    /* ═══════════════════════════════════════
+       PANEL
+    ═══════════════════════════════════════ */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      animation: slideUp 0.45s ease both;
+    }
+    .panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; font-weight: 700; color: var(--ink);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-title svg { width: 16px; height: 16px; color: var(--teal); stroke: var(--teal); }
+    .panel-body { padding: 24px; }
+
+    /* ═══════════════════════════════════════
+       FORM
+    ═══════════════════════════════════════ */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-full { grid-column: 1/-1; }
+    @media(max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .fl {
+      font-size: 11.5px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      display: block; margin-bottom: 7px;
+    }
+    .fi {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border); border-radius: 11px;
+      font-size: 14px; font-family: 'DM Sans', sans-serif;
+      color: var(--ink); background: var(--white);
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .fi:focus { border-color: var(--teal-l); box-shadow: 0 0 0 3px rgba(20,184,166,0.1); }
+    .fi::placeholder { color: #94a3b8; }
+    .fsel {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px; padding-right: 38px;
+    }
+
+    /* ═══════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 11px; border: none;
+      font-size: 13.5px; font-weight: 700; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease; text-decoration: none;
+    }
+    .btn svg { width: 15px; height: 15px; }
+    .btn-p {
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      color: white;
+      box-shadow: 0 4px 14px rgba(13,148,136,0.3);
+    }
+    .btn-p:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,148,136,0.4); }
+    .btn-o { background: var(--white); color: var(--ink); border: 1.5px solid var(--border); }
+    .btn-o:hover { background: var(--bg); }
+    .btn-d { background: #fef2f2; color: var(--red); border: 1.5px solid rgba(239,68,68,0.2); }
+    .btn-d:hover { background: #fee2e2; }
+    .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 9px; }
+
+    /* ═══════════════════════════════════════
+       BADGES
+    ═══════════════════════════════════════ */
+    .bdg {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11.5px; font-weight: 700;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .bdg::before { content:''; width:6px; height:6px; border-radius:50%; }
+    .b-delv { background: rgba(16,185,129,.1); color: #065f46; }
+    .b-delv::before { background: var(--green); }
+    .b-ship { background: rgba(13,148,136,.1); color: var(--teal); }
+    .b-ship::before { background: var(--teal); }
+    .b-pend { background: rgba(245,158,11,.1); color: #92400e; }
+    .b-pend::before { background: var(--amber); }
+    .b-canc { background: rgba(239,68,68,.1); color: #7f1d1d; }
+    .b-canc::before { background: var(--red); }
+
+    /* ═══════════════════════════════════════
+       ORDERS
+    ═══════════════════════════════════════ */
+    .order-card {
+      border: 1.5px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      margin-bottom: 14px; transition: box-shadow 0.2s;
+    }
+    .order-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .order-head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 10px;
+    }
+    .order-num { font-weight: 700; font-size: 14px; color: var(--ink); }
+    .order-date { font-size: 12.5px; color: var(--muted); }
+    .order-amount { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--teal); margin-left: auto; }
+    .order-body { padding: 14px 18px; display: flex; align-items: center; gap: 14px; }
+    .order-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: var(--teal-xl); border: 1px solid var(--teal-mid);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .order-detail { flex: 1; }
+    .order-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+    .order-sub { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+    .order-track {
+      font-size: 12px; color: var(--teal); font-weight: 600;
+      display: flex; align-items: center; gap: 5px; margin-top: 6px;
+    }
+    .order-track svg { width: 12px; height: 12px; }
+
+    /* Progress bar livraison */
+    .progress-wrap { display: flex; align-items: center; gap: 0; margin-top: 14px; }
+    .progress-step {
+      display: flex; flex-direction: column; align-items: center;
+      flex: 1; position: relative;
+    }
+    .progress-step::before {
+      content: ''; position: absolute; top: 10px; left: 50%; right: -50%;
+      height: 2px; background: var(--border); z-index: 0;
+    }
+    .progress-step:last-child::before { display: none; }
+    .progress-step.done::before { background: var(--teal); }
+    .p-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid var(--border); background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1; flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .p-dot svg { width: 11px; height: 11px; stroke: var(--muted); }
+    .progress-step.done .p-dot { border-color: var(--teal); background: var(--teal); }
+    .progress-step.done .p-dot svg { stroke: white; }
+    .progress-step.active .p-dot { border-color: var(--teal); background: var(--teal-xl); }
+    .progress-step.active .p-dot svg { stroke: var(--teal); }
+    .p-label { font-size: 10px; color: var(--muted); margin-top: 5px; text-align: center; font-weight: 600; white-space: nowrap; }
+    .progress-step.done .p-label, .progress-step.active .p-label { color: var(--teal); }
+
+    /* ═══════════════════════════════════════
+       ADDRESSES
+    ═══════════════════════════════════════ */
+    .addr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width: 600px) { .addr-grid { grid-template-columns: 1fr; } }
+    .addr-card {
+      border: 1.5px solid var(--border); border-radius: 14px;
+      padding: 16px; position: relative; transition: border-color 0.2s;
+    }
+    .addr-card.main { border-color: var(--teal); }
+    .addr-main-tag {
+      position: absolute; top: -9px; left: 14px;
+      background: var(--teal); color: white;
+      font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 999px;
+    }
+    .addr-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+    .addr-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .addr-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .addr-add {
+      border: 2px dashed var(--border); border-radius: 14px;
+      padding: 24px 16px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      cursor: pointer; transition: all 0.2s; color: var(--muted);
+      font-size: 13.5px; font-weight: 600; background: transparent;
+      border: 2px dashed var(--border); font-family: 'DM Sans', sans-serif;
+    }
+    .addr-add:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-xl); }
+    .addr-add svg { width: 24px; height: 24px; }
+
+    /* ═══════════════════════════════════════
+       TOGGLE
+    ═══════════════════════════════════════ */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label { font-size: 14px; font-weight: 600; color: var(--ink); }
+    .toggle-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .sw { position: relative; display: inline-block; width: 42px; height: 24px; }
+    .sw input { opacity: 0; width: 0; height: 0; }
+    .sld { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 999px; transition: 0.2s; }
+    .sld::before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+    input:checked + .sld { background: var(--teal); }
+    input:checked + .sld::before { transform: translateX(18px); }
+
+    /* ═══════════════════════════════════════
+       AFFILIATION
+    ═══════════════════════════════════════ */
+    .affil-hero {
+      background: linear-gradient(135deg, var(--ink2) 0%, #0f172a 100%);
+      border-radius: 20px; padding: 32px 28px;
+      position: relative; overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .affil-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 85% 50%, rgba(20,184,166,0.18) 0%, transparent 60%),
+                  radial-gradient(circle at 10% 80%, rgba(20,184,166,0.08) 0%, transparent 50%);
+    }
+    .affil-hero-content { position: relative; z-index: 1; }
+    .affil-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal-l);
+      margin-bottom: 10px;
+    }
+    .affil-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 4vw, 28px); font-weight: 700;
+      color: white; line-height: 1.25; margin-bottom: 10px;
+    }
+    .affil-title em { font-style: italic; color: var(--teal-l); }
+    .affil-desc { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.6; margin-bottom: 24px; max-width: 480px; }
+    .affil-perks {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .affil-perk {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 16px; border-radius: 12px;
+    }
+    .affil-perk-icon { font-size: 20px; }
+    .affil-perk-v { font-size: 18px; font-weight: 700; color: var(--teal-l); font-family: 'Playfair Display', serif; }
+    .affil-perk-l { font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+
+    /* Code box */
+    .affil-code-wrap {
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    }
+    .affil-code-box {
+      display: flex; align-items: center; gap: 0;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px; overflow: hidden; flex: 1; min-width: 200px;
+    }
+    .affil-code-prefix {
+      padding: 12px 14px; font-size: 13px; color: rgba(255,255,255,0.4);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      white-space: nowrap;
+    }
+    .affil-code {
+      flex: 1; padding: 12px 16px;
+      font-size: 16px; font-weight: 700; color: white;
+      letter-spacing: 0.12em; font-family: 'DM Sans', monospace;
+    }
+    .affil-copy {
+      padding: 0 16px; height: 100%; border: none;
+      background: var(--teal); color: white; cursor: pointer;
+      font-size: 13px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: 6px;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .affil-copy:hover { background: var(--teal-l); }
+    .affil-copy svg { width: 14px; height: 14px; }
+
+    /* Stats affiliation */
+    .affil-stats-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media(max-width: 800px) { .affil-stats-grid { grid-template-columns: repeat(2,1fr); } }
+    @media(max-width: 420px)  { .affil-stats-grid { grid-template-columns: 1fr 1fr; } }
+
+    .affil-stat {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 18px 16px;
+    }
+    .affil-stat-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--teal-xl);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 12px;
+    }
+    .affil-stat-v {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; font-weight: 700; color: var(--ink);
+    }
+    .affil-stat-l { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+
+    /* Paliers */
+    .palier-list { display: flex; flex-direction: column; gap: 12px; }
+    .palier {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 18px; border-radius: 14px;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .palier.reached { border-color: var(--teal); background: var(--teal-xl); }
+    .palier.current { border-color: var(--amber); background: var(--amber-bg); }
+    .palier-medal { font-size: 28px; flex-shrink: 0; }
+    .palier-info { flex: 1; }
+    .palier-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+    .palier-cond { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+    .palier-reward {
+      font-size: 13px; font-weight: 700;
+      color: var(--teal); text-align: right;
+    }
+    .palier-tag {
+      font-size: 10px; font-weight: 700; padding: 3px 10px;
+      border-radius: 999px; flex-shrink: 0;
+    }
+    .tag-reached { background: var(--teal); color: white; }
+    .tag-current { background: var(--amber); color: white; }
+    .tag-locked  { background: var(--border); color: var(--muted); }
+
+    /* Progress bar palier */
+    .palier-progress-wrap { margin-top: 6px; }
+    .palier-progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+    .palier-bar { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+    .palier-fill {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal-l), var(--teal));
+      transition: width 1s cubic-bezier(0.34,1.36,0.64,1);
+    }
+
+    /* Referrals table */
+    .ref-table { width: 100%; border-collapse: collapse; }
+    .ref-table th {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted);
+      padding: 10px 16px; background: var(--bg);
+      border-bottom: 1px solid var(--border); text-align: left;
+    }
+    .ref-table td {
+      padding: 13px 16px; font-size: 13.5px;
+      border-bottom: 1px solid var(--border); color: var(--ink);
+    }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table tr:hover td { background: #fafafa; }
+
+    /* ═══════════════════════════════════════
+       SECTION TABS
+    ═══════════════════════════════════════ */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ═══════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════ */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .d1 { animation-delay: 0.05s; }
+    .d2 { animation-delay: 0.10s; }
+    .d3 { animation-delay: 0.15s; }
+
+    /* ═══════════════════════════════════════
+       TOAST
+    ═══════════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--ink2); color: white;
+      padding: 12px 24px; border-radius: 14px;
+      font-size: 13.5px; font-weight: 600;
+      opacity: 0; pointer-events: none;
+      transition: all 0.3s ease; z-index: 999;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ═══════════════════════════════════════
+       SAVE BTN FLOATING
+    ═══════════════════════════════════════ */
+    .save-bar {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 100;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+    .save-bar.visible { display: flex; gap: 10px; }
+
+  </style>
+</head>
+<body>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+    </svg>
+    <span id="toastMsg">Action effectuée</span>
+  </div>
+
+  <!-- SAVE BAR -->
+  <div class="save-bar" id="saveBar">
+    <button class="btn btn-o" onclick="resetForm()">Annuler</button>
+    <button class="btn btn-p" onclick="saveProfile()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      Enregistrer les modifications
+    </button>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index_with_badge.html" class="nav-brand">
+      <div class="nav-logo">🎁</div>
+      <span class="nav-name">Mystery Box Global</span>
+    </a>
+    <div class="nav-sep"></div>
+    <div class="nav-links">
+      <a href="index_with_badge.html" class="nav-tab">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Accueil
+      </a>
+      <a href="#" class="nav-tab active">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        Mon compte
+      </a>
+    </div>
+    <div class="nav-avatar">S</div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- PROFILE HERO -->
+    <div class="profile-hero">
+      <div class="hero-banner"></div>
+      <div class="hero-body">
+        <div class="avatar-ring">S</div>
+        <div class="hero-info">
+          <div class="hero-name">
+            Sana M.
+            <span class="member-badge">⭐ Membre Gold</span>
+          </div>
+          <div class="hero-sub">sana.m@mail.com · 🇫🇷 France · Membre depuis janvier 2026</div>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat"><div class="hstat-v">3</div><div class="hstat-l">Commandes</div></div>
+          <div class="hstat"><div class="hstat-v" style="color:var(--green)">177€</div><div class="hstat-l">Dépensé</div></div>
+          <div class="hstat"><div class="hstat-v" style="color:var(--teal)">5</div><div class="hstat-l">Filleuls</div></div>
+          <div class="hstat"><div class="hstat-v" style="color:var(--gold)">42€</div><div class="hstat-l">Gains affil.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('profil', this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        Mon profil
+      </button>
+      <button class="tab-btn" onclick="showTab('commandes', this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Mes commandes
+        <span class="tab-badge">3</span>
+      </button>
+      <button class="tab-btn" onclick="showTab('adresses', this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Adresses
+      </button>
+      <button class="tab-btn" onclick="showTab('affiliation', this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        Affiliation
+        <span class="tab-badge" style="background:var(--gold)">42€</span>
+      </button>
+      <button class="tab-btn" onclick="showTab('securite', this)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        Sécurité
+      </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB : PROFIL
+    ══════════════════════════════════════════ -->
+    <div class="section active" id="tab-profil">
+
+      <div class="panel d1">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            Informations personnelles
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div>
+              <label class="fl">Prénom</label>
+              <input class="fi" id="firstName" value="Sana" oninput="onFormChange()"/>
+            </div>
+            <div>
+              <label class="fl">Nom</label>
+              <input class="fi" id="lastName" value="M." oninput="onFormChange()"/>
+            </div>
+            <div>
+              <label class="fl">Email</label>
+              <input class="fi" id="email" type="email" value="sana.m@mail.com" oninput="onFormChange()"/>
+            </div>
+            <div>
+              <label class="fl">Téléphone</label>
+              <input class="fi" id="phone" value="+33 6 12 34 56 78" oninput="onFormChange()"/>
+            </div>
+            <div>
+              <label class="fl">Date de naissance</label>
+              <input class="fi" type="date" id="dob" value="1995-04-12" oninput="onFormChange()"/>
+            </div>
+            <div>
+              <label class="fl">Pays</label>
+              <select class="fi fsel" id="country" onchange="onFormChange()">
+                <option value="FR" selected>🇫🇷 France</option>
+                <option value="BJ">🇧🇯 Bénin</option>
+                <option value="CI">🇨🇮 Côte d'Ivoire</option>
+              </select>
+            </div>
+            <div class="form-full">
+              <label class="fl">Genre (optionnel)</label>
+              <select class="fi fsel" id="gender" onchange="onFormChange()">
+                <option>Préfère ne pas préciser</option>
+                <option selected>Femme</option>
+                <option>Homme</option>
+                <option>Non-binaire</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel d2">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            Préférences de communication
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Emails promotionnels</div>
+              <div class="toggle-sub">Offres exclusives, nouvelles occasions, réductions</div>
+            </div>
+            <label class="sw"><input type="checkbox" checked><span class="sld"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Notifications de livraison</div>
+              <div class="toggle-sub">Suivi et mises à jour de vos colis</div>
+            </div>
+            <label class="sw"><input type="checkbox" checked><span class="sld"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Newsletter mensuelle</div>
+              <div class="toggle-sub">Actualités Mystery Box Global</div>
+            </div>
+            <label class="sw"><input type="checkbox"><span class="sld"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Rappels d'occasions</div>
+              <div class="toggle-sub">Fêtes, anniversaires, Ramadan…</div>
+            </div>
+            <label class="sw"><input type="checkbox" checked><span class="sld"></span></label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB : COMMANDES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="tab-commandes">
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            Historique des commandes
+          </div>
+          <select class="fi fsel" style="width:auto;padding:8px 32px 8px 12px;font-size:13px">
+            <option>Toutes les commandes</option>
+            <option>En cours</option>
+            <option>Livrées</option>
+            <option>Annulées</option>
+          </select>
+        </div>
+        <div class="panel-body" style="padding:20px">
+
+          <!-- Commande 1 — En transit -->
+          <div class="order-card">
+            <div class="order-head">
+              <div>
+                <div class="order-num">#MBG-2418</div>
+                <div class="order-date">11 mars 2026 · Colissimo</div>
+              </div>
+              <span class="bdg b-ship">Expédiée</span>
+              <div class="order-amount">59€</div>
+            </div>
+            <div class="order-body">
+              <div class="order-icon">🎄</div>
+              <div class="order-detail">
+                <div class="order-name">Box Noël Premium</div>
+                <div class="order-sub">Réf. NOEL-PREM-001 · 🇫🇷 Livraison domicile</div>
+                <div class="order-track">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10"/></svg>
+                  En cours de livraison · Estimé le 13/03/2026
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+                <button class="btn btn-o btn-sm">Suivre</button>
+                <button class="btn btn-o btn-sm">Facture</button>
+              </div>
+            </div>
+            <!-- Progress -->
+            <div style="padding:0 18px 16px">
+              <div class="progress-wrap">
+                <div class="progress-step done">
+                  <div class="p-dot"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+                  <div class="p-label">Confirmée</div>
+                </div>
+                <div class="progress-step done">
+                  <div class="p-dot"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+                  <div class="p-label">Préparée</div>
+                </div>
+                <div class="progress-step active">
+                  <div class="p-dot"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+                  <div class="p-label">En transit</div>
+                </div>
+                <div class="progress-step">
+                  <div class="p-dot"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+                  <div class="p-label">Livrée</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Commande 2 — Livrée -->
+          <div class="order-card">
+            <div class="order-head">
+              <div>
+                <div class="order-num">#MBG-2380</div>
+                <div class="order-date">18 février 2026 · Colissimo</div>
+              </div>
+              <span class="bdg b-delv">Livrée</span>
+              <div class="order-amount">55€</div>
+            </div>
+            <div class="order-body">
+              <div class="order-icon">🌙</div>
+              <div class="order-detail">
+                <div class="order-name">Box Ramadan Nour</div>
+                <div class="order-sub">Réf. RAM-NOUR-002 · 🇫🇷 Livraison domicile</div>
+                <div class="order-track" style="color:var(--green)">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Livrée le 22 février 2026
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+                <button class="btn btn-o btn-sm">Voir</button>
+                <button class="btn btn-o btn-sm">Facture</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Commande 3 — Livrée -->
+          <div class="order-card">
+            <div class="order-head">
+              <div>
+                <div class="order-num">#MBG-2312</div>
+                <div class="order-date">14 janvier 2026 · Colissimo</div>
+              </div>
+              <span class="bdg b-delv">Livrée</span>
+              <div class="order-amount">65€</div>
+            </div>
+            <div class="order-body">
+              <div class="order-icon">🎂</div>
+              <div class="order-detail">
+                <div class="order-name">Box Anniversaire Grande Fête</div>
+                <div class="order-sub">Réf. ANN-GRF-001 · 🇫🇷 Livraison domicile</div>
+                <div class="order-track" style="color:var(--green)">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  Livrée le 17 janvier 2026
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+                <button class="btn btn-o btn-sm">Voir</button>
+                <button class="btn btn-o btn-sm">Facture</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB : ADRESSES
+    ══════════════════════════════════════════ -->
+    <div class="section" id="tab-adresses">
+
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+            Mes adresses de livraison
+          </div>
+          <button class="btn btn-p btn-sm" onclick="showToast('Formulaire d\'ajout ouvert')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            Ajouter
+          </button>
+        </div>
+        <div class="panel-body">
+          <div class="addr-grid">
+            <div class="addr-card main">
+              <span class="addr-main-tag">Principale</span>
+              <div class="addr-name">🏠 Domicile</div>
+              <div class="addr-text">Sana M.<br>24 rue de la Paix<br>75001 Paris<br>🇫🇷 France</div>
+              <div class="addr-actions">
+                <button class="btn btn-o btn-sm" onclick="showToast('Mode édition activé')">Modifier</button>
+              </div>
+            </div>
+            <div class="addr-card">
+              <div class="addr-name">🏢 Bureau</div>
+              <div class="addr-text">Sana M.<br>12 av. des Champs-Élysées<br>75008 Paris<br>🇫🇷 France</div>
+              <div class="addr-actions">
+                <button class="btn btn-o btn-sm" onclick="showToast('Adresse définie comme principale')">Définir principale</button>
+                <button class="btn btn-d btn-sm" onclick="showToast('Adresse supprimée')">Supprimer</button>
+              </div>
+            </div>
+            <button class="addr-add" onclick="showToast('Nouveau formulaire d\'adresse')">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+              Ajouter une adresse
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB : AFFILIATION
+    ══════════════════════════════════════════ -->
+    <div class="section" id="tab-affiliation">
+
+      <!-- Hero affiliation -->
+      <div class="affil-hero">
+        <div class="affil-hero-content">
+          <div class="affil-eyebrow">✨ Programme d'affiliation</div>
+          <div class="affil-title">Partagez la magie,<br/><em>gagnez à chaque cadeau</em></div>
+          <p class="affil-desc">Invitez vos proches à découvrir Mystery Box Global et gagnez <strong style="color:var(--teal-l)">10% de commission</strong> sur chacune de leurs commandes — pour toujours.</p>
+
+          <div class="affil-perks">
+            <div class="affil-perk">
+              <span class="affil-perk-icon">💰</span>
+              <div>
+                <div class="affil-perk-v">10%</div>
+                <div class="affil-perk-l">Commission vie</div>
+              </div>
+            </div>
+            <div class="affil-perk">
+              <span class="affil-perk-icon">🎁</span>
+              <div>
+                <div class="affil-perk-v">-10€</div>
+                <div class="affil-perk-l">Offert à votre filleul</div>
+              </div>
+            </div>
+            <div class="affil-perk">
+              <span class="affil-perk-icon">⚡</span>
+              <div>
+                <div class="affil-perk-v">48h</div>
+                <div class="affil-perk-l">Délai de virement</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="affil-code-wrap">
+            <div class="affil-code-box">
+              <span class="affil-code-prefix">mysteryboxglobal.com?ref=</span>
+              <span class="affil-code" id="affCode">SANA2026</span>
+            </div>
+            <button class="affil-copy" onclick="copyCode()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+              </svg>
+              Copier
+            </button>
+            <button class="btn btn-p btn-sm" onclick="shareLink()" style="padding:12px 18px">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+              Partager
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="affil-stats-grid">
+        <div class="affil-stat">
+          <div class="affil-stat-icon">👥</div>
+          <div class="affil-stat-v">5</div>
+          <div class="affil-stat-l">Filleuls actifs</div>
+        </div>
+        <div class="affil-stat">
+          <div class="affil-stat-icon">📦</div>
+          <div class="affil-stat-v">8</div>
+          <div class="affil-stat-l">Commandes générées</div>
+        </div>
+        <div class="affil-stat">
+          <div class="affil-stat-icon">💸</div>
+          <div class="affil-stat-v" style="color:var(--green)">42€</div>
+          <div class="affil-stat-l">Gains totaux</div>
+        </div>
+        <div class="affil-stat">
+          <div class="affil-stat-icon">⏳</div>
+          <div class="affil-stat-v" style="color:var(--amber)">12€</div>
+          <div class="affil-stat-l">En attente</div>
+        </div>
+      </div>
+
+      <!-- Paliers -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            Paliers & récompenses
+          </div>
+          <span style="font-size:12px;color:var(--muted)">Vous êtes en palier <strong style="color:var(--amber)">Gold ⭐</strong></span>
+        </div>
+        <div class="panel-body">
+          <div class="palier-list">
+            <div class="palier reached">
+              <span class="palier-medal">🥉</span>
+              <div class="palier-info">
+                <div class="palier-name">Starter</div>
+                <div class="palier-cond">Dès le 1er filleul</div>
+              </div>
+              <div class="palier-reward">10% commission</div>
+              <span class="palier-tag tag-reached">Atteint</span>
+            </div>
+            <div class="palier reached">
+              <span class="palier-medal">🥈</span>
+              <div class="palier-info">
+                <div class="palier-name">Silver</div>
+                <div class="palier-cond">3 filleuls actifs</div>
+              </div>
+              <div class="palier-reward">12% + 5€ bonus/mois</div>
+              <span class="palier-tag tag-reached">Atteint</span>
+            </div>
+            <div class="palier current">
+              <span class="palier-medal">⭐</span>
+              <div class="palier-info">
+                <div class="palier-name">Gold</div>
+                <div class="palier-cond">5 filleuls actifs</div>
+                <div class="palier-progress-wrap">
+                  <div class="palier-progress-label"><span>5 / 10 filleuls vers Platinum</span><span>50%</span></div>
+                  <div class="palier-bar"><div class="palier-fill" style="width:50%"></div></div>
+                </div>
+              </div>
+              <div class="palier-reward">15% + 10€ bonus/mois</div>
+              <span class="palier-tag tag-current">Actuel</span>
+            </div>
+            <div class="palier">
+              <span class="palier-medal">💎</span>
+              <div class="palier-info">
+                <div class="palier-name">Platinum</div>
+                <div class="palier-cond">10 filleuls actifs</div>
+              </div>
+              <div class="palier-reward" style="color:var(--muted)">18% + 20€ bonus/mois</div>
+              <span class="palier-tag tag-locked">🔒 Verrouillé</span>
+            </div>
+            <div class="palier">
+              <span class="palier-medal">👑</span>
+              <div class="palier-info">
+                <div class="palier-name">Elite</div>
+                <div class="palier-cond">25 filleuls actifs</div>
+              </div>
+              <div class="palier-reward" style="color:var(--muted)">20% + commissions récursives</div>
+              <span class="palier-tag tag-locked">🔒 Verrouillé</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historique filleuls -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>
+            Historique des filleuls
+          </div>
+          <button class="btn btn-o btn-sm" onclick="showToast('Export CSV téléchargé')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Exporter
+          </button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Filleul</th>
+                <th>Inscrit le</th>
+                <th>Commandes</th>
+                <th>CA généré</th>
+                <th>Ma commission</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div style="font-weight:600">Kofi A.</div><div style="font-size:11.5px;color:var(--muted)">kofi.a@mail.com</div></td>
+                <td>15/01/2026</td><td>2</td><td>110€</td>
+                <td style="font-weight:700;color:var(--green)">+11€</td>
+                <td><span class="bdg b-delv">Payée</span></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">Léa B.</div><div style="font-size:11.5px;color:var(--muted)">lea.b@mail.com</div></td>
+                <td>14/02/2026</td><td>3</td><td>203€</td>
+                <td style="font-weight:700;color:var(--green)">+20.3€</td>
+                <td><span class="bdg b-delv">Payée</span></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">Omar S.</div><div style="font-size:11.5px;color:var(--muted)">omar.s@mail.com</div></td>
+                <td>28/02/2026</td><td>1</td><td>79€</td>
+                <td style="font-weight:700;color:var(--amber)">+7.9€</td>
+                <td><span class="bdg b-pend">En attente</span></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">Emma V.</div><div style="font-size:11.5px;color:var(--muted)">emma.v@mail.com</div></td>
+                <td>25/02/2026</td><td>2</td><td>94€</td>
+                <td style="font-weight:700;color:var(--amber)">+9.4€</td>
+                <td><span class="bdg b-pend">En attente</span></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">Chloé R.</div><div style="font-size:11.5px;color:var(--muted)">chloe.r@mail.com</div></td>
+                <td>01/03/2026</td><td>1</td><td>25€</td>
+                <td style="font-weight:700;color:var(--muted)">+2.5€</td>
+                <td><span class="bdg b-ship">En cours</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <span style="font-size:12.5px;color:var(--muted)">5 filleuls · Total généré : <strong style="color:var(--ink)">511€</strong></span>
+          <button class="btn btn-p" onclick="showToast('Virement de 30€ demandé !')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            Retirer mes gains (30€)
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         TAB : SÉCURITÉ
+    ══════════════════════════════════════════ -->
+    <div class="section" id="tab-securite">
+
+      <div class="panel d1">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            Mot de passe
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="form-full">
+              <label class="fl">Mot de passe actuel</label>
+              <input class="fi" type="password" placeholder="••••••••"/>
+            </div>
+            <div>
+              <label class="fl">Nouveau mot de passe</label>
+              <input class="fi" type="password" id="newPwd" placeholder="••••••••" oninput="checkPwd()"/>
+            </div>
+            <div>
+              <label class="fl">Confirmer le nouveau</label>
+              <input class="fi" type="password" id="confirmPwd" placeholder="••••••••" oninput="checkPwd()"/>
+            </div>
+          </div>
+          <!-- Force mot de passe -->
+          <div style="margin:16px 0">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Force du mot de passe</div>
+            <div style="display:flex;gap:4px">
+              <div style="flex:1;height:4px;border-radius:999px;background:var(--border)" id="s1"></div>
+              <div style="flex:1;height:4px;border-radius:999px;background:var(--border)" id="s2"></div>
+              <div style="flex:1;height:4px;border-radius:999px;background:var(--border)" id="s3"></div>
+              <div style="flex:1;height:4px;border-radius:999px;background:var(--border)" id="s4"></div>
+            </div>
+          </div>
+          <button class="btn btn-p" onclick="showToast('Mot de passe modifié avec succès !')">Changer le mot de passe</button>
+        </div>
+      </div>
+
+      <div class="panel d2">
+        <div class="panel-head">
+          <div class="panel-title">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Authentification à deux facteurs
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Activer la 2FA</div>
+              <div class="toggle-sub">Protégez votre compte avec une double vérification</div>
+            </div>
+            <label class="sw"><input type="checkbox"><span class="sld"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Alertes de connexion par email</div>
+              <div class="toggle-sub">Recevez un email à chaque nouvelle connexion</div>
+            </div>
+            <label class="sw"><input type="checkbox" checked><span class="sld"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel d3" style="border:1.5px solid rgba(239,68,68,.2)">
+        <div class="panel-head" style="background:#fef2f2">
+          <div class="panel-title" style="color:var(--red)">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            Zone sensible
+          </div>
+        </div>
+        <div class="panel-body">
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:16px;line-height:1.6">La suppression de votre compte est irréversible. Toutes vos données, commandes et gains d'affiliation seront définitivement effacés.</p>
+          <button class="btn btn-d" onclick="if(confirm('Supprimer définitivement votre compte ?')) showToast('Demande de suppression envoyée')">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Supprimer mon compte
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /page-wrap -->
+
+  <script>
+    // ── TABS ────────────────────────────────────
+    function showTab(id, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+      // Hide save bar when switching tabs
+      document.getElementById('saveBar').classList.remove('visible');
+    }
+
+    // ── FORM CHANGE ─────────────────────────────
+    function onFormChange() {
+      document.getElementById('saveBar').classList.add('visible');
+    }
+
+    function resetForm() {
+      document.getElementById('firstName').value = 'Sana';
+      document.getElementById('lastName').value  = 'M.';
+      document.getElementById('email').value     = 'sana.m@mail.com';
+      document.getElementById('phone').value     = '+33 6 12 34 56 78';
+      document.getElementById('saveBar').classList.remove('visible');
+    }
+
+    function saveProfile() {
+      document.getElementById('saveBar').classList.remove('visible');
+      showToast('Profil enregistré avec succès !');
+    }
+
+    // ── PASSWORD STRENGTH ────────────────────────
+    function checkPwd() {
+      const pwd = document.getElementById('newPwd').value;
+      const bars = ['s1','s2','s3','s4'];
+      const colors = ['#ef4444','#f59e0b','#14b8a6','#10b981'];
+      let score = 0;
+      if (pwd.length >= 6)  score++;
+      if (pwd.length >= 10) score++;
+      if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd)) score++;
+      if (/[^A-Za-z0-9]/.test(pwd)) score++;
+      bars.forEach((id, i) => {
+        document.getElementById(id).style.background = i < score ? colors[Math.min(score-1,3)] : 'var(--border)';
+      });
+    }
+
+    // ── COPY CODE ───────────────────────────────
+    function copyCode() {
+      const code = 'mysteryboxglobal.com?ref=' + document.getElementById('affCode').textContent;
+      navigator.clipboard.writeText(code).then(() => showToast('Lien copié dans le presse-papier !'));
+    }
+
+    function shareLink() {
+      if (navigator.share) {
+        navigator.share({ title: 'Mystery Box Global', url: 'https://mysteryboxglobal.com?ref=SANA2026', text: '🎁 Découvrez Mystery Box Global — des cadeaux surprises pour toutes les occasions !' });
+      } else {
+        copyCode();
+      }
+    }
+
+    // ── TOAST ───────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg || 'Action effectuée';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // ── ANIMATE PROGRESS BARS ───────────────────
+    setTimeout(() => {
+      document.querySelectorAll('.palier-fill').forEach(el => {
+        const w = el.style.width;
+        el.style.width = '0';
+        setTimeout(() => el.style.width = w, 100);
+      });
+    }, 200);
+  </script>
+
+</body>
+</html>
