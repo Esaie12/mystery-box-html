@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MBG Admin — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sidebar-w: 256px;
+      --sidebar-collapsed: 68px;
+      --teal:   #0d9488;
+      --teal-l: #14b8a6;
+      --teal-xl:#f0fdfa;
+      --ink:    #0f172a;
+      --ink2:   #1e293b;
+      --muted:  #64748b;
+      --border: #e2e8f0;
+      --bg:     #f8fafc;
+      --white:  #ffffff;
+      --amber:  #f59e0b;
+      --red:    #ef4444;
+      --green:  #10b981;
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════════ */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--ink2);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: width .28s cubic-bezier(.4,0,.2,1), transform .28s cubic-bezier(.4,0,.2,1);
+      overflow: hidden;
+    }
+
+    /* Collapsed state (desktop) */
+    #sidebar.collapsed { width: var(--sidebar-collapsed); }
+    #sidebar.collapsed .nav-label,
+    #sidebar.collapsed .sidebar-title,
+    #sidebar.collapsed .sidebar-subtitle,
+    #sidebar.collapsed .nav-section-label,
+    #sidebar.collapsed .sidebar-footer-text { opacity: 0; pointer-events: none; width: 0; overflow: hidden; }
+    #sidebar.collapsed .sidebar-logo { justify-content: center; padding: 20px 0; }
+    #sidebar.collapsed .nav-item { justify-content: center; padding: 12px 0; }
+    #sidebar.collapsed .nav-badge { display: none; }
+    #sidebar.collapsed .sidebar-footer { justify-content: center; }
+
+    /* Mobile: hidden off-screen by default */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-100%); width: var(--sidebar-w) !important; }
+      #sidebar.mobile-open { transform: translateX(0); }
+    }
+
+    /* Logo zone */
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      min-height: 72px;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .sidebar-logo-icon svg { width: 18px; height: 18px; color: white; }
+    .sidebar-title {
+      font-family: var(--font-serif);
+      font-size: 15px; font-weight: 700;
+      color: white; line-height: 1.2;
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+    .sidebar-subtitle {
+      font-size: 9px; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(255,255,255,.35);
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+
+    /* Toggle button */
+    #toggleBtn {
+      position: absolute;
+      top: 20px; right: -14px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 2px solid var(--ink2);
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      z-index: 101;
+      transition: transform .3s;
+    }
+    #toggleBtn svg { width: 12px; height: 12px; transition: transform .3s; }
+    #sidebar.collapsed #toggleBtn svg { transform: rotate(180deg); }
+    @media (max-width: 768px) { #toggleBtn { display: none; } }
+
+    /* Nav */
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .sidebar-nav::-webkit-scrollbar { width: 4px; }
+    .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+
+    .nav-section-label {
+      font-size: 9.5px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: rgba(255,255,255,.25);
+      padding: 16px 10px 6px;
+      white-space: nowrap;
+      transition: opacity .2s;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      color: rgba(255,255,255,.55);
+      font-size: 13.5px; font-weight: 500;
+      white-space: nowrap;
+      position: relative;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+    .nav-item.active { background: rgba(13,148,136,.18); color: var(--teal-l); }
+    .nav-item.active .nav-icon { color: var(--teal-l); }
+    .nav-icon { width: 18px; height: 18px; flex-shrink: 0; }
+    .nav-label { transition: opacity .2s; white-space: nowrap; flex: 1; }
+    .nav-badge {
+      font-size: 10px; font-weight: 700;
+      background: var(--teal); color: white;
+      padding: 2px 7px; border-radius: 999px;
+      margin-left: auto; flex-shrink: 0;
+      transition: opacity .2s;
+    }
+    .nav-badge.red { background: var(--red); }
+    .nav-badge.amber { background: var(--amber); }
+
+    /* Tooltip for collapsed mode */
+    #sidebar.collapsed .nav-item::after {
+      content: attr(data-tooltip);
+      position: absolute; left: calc(100% + 14px);
+      background: var(--ink); color: white;
+      font-size: 12px; font-weight: 500;
+      padding: 6px 10px; border-radius: 8px;
+      white-space: nowrap;
+      opacity: 0; pointer-events: none;
+      transform: translateX(-6px);
+      transition: opacity .2s, transform .2s;
+      z-index: 200;
+    }
+    #sidebar.collapsed .nav-item:hover::after {
+      opacity: 1; transform: translateX(0);
+    }
+
+    /* Footer */
+    .sidebar-footer {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 14px 14px;
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+    }
+    .sidebar-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-size: 14px; font-weight: 700;
+      color: white; flex-shrink: 0;
+    }
+    .sidebar-footer-text { transition: opacity .2s; white-space: nowrap; }
+    .sidebar-footer-name { font-size: 13px; font-weight: 600; color: white; }
+    .sidebar-footer-role { font-size: 11px; color: rgba(255,255,255,.35); }
+
+    /* ══════════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════════ */
+    #main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex; flex-direction: column;
+      min-height: 100vh;
+      transition: margin-left .28s cubic-bezier(.4,0,.2,1);
+    }
+    #sidebar.collapsed ~ #main { margin-left: var(--sidebar-collapsed); }
+    @media (max-width: 768px) { #main { margin-left: 0 !important; } }
+
+    /* Topbar */
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      height: 64px;
+      display: flex; align-items: center;
+      padding: 0 24px; gap: 16px;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-burger {
+      display: none;
+      width: 36px; height: 36px;
+      border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; cursor: pointer;
+      align-items: center; justify-content: center;
+      color: var(--ink);
+    }
+    @media (max-width: 768px) { .topbar-burger { display: flex; } }
+    .topbar-title { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); }
+    .topbar-search {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 14px;
+      font-size: 13px; color: var(--muted);
+      cursor: pointer;
+    }
+    .topbar-search svg { width: 15px; height: 15px; }
+    .topbar-actions { display: flex; align-items: center; gap: 10px; }
+    .topbar-btn {
+      width: 36px; height: 36px; border-radius: 9px;
+      border: 1px solid var(--border); background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; position: relative; color: var(--muted);
+      transition: background .15s, color .15s;
+    }
+    .topbar-btn:hover { background: var(--bg); color: var(--ink); }
+    .topbar-btn svg { width: 16px; height: 16px; }
+    .notif-dot {
+      position: absolute; top: 6px; right: 6px;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--red); border: 1.5px solid white;
+    }
+    .topbar-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-l), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-size: 13px; font-weight: 700;
+      color: white; cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Page content */
+    .page-content {
+      padding: 28px 24px;
+      flex: 1;
+    }
+    @media (max-width: 640px) { .page-content { padding: 20px 16px; } }
+
+    /* ══════════════════════════════════════
+       STAT CARDS
+    ══════════════════════════════════════ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .stats-grid { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: box-shadow .25s, transform .25s;
+      animation: fadeUp .5s ease forwards; opacity: 0;
+    }
+    .stat-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,.07); transform: translateY(-2px); }
+    .stat-card:nth-child(1) { animation-delay: .05s; }
+    .stat-card:nth-child(2) { animation-delay: .10s; }
+    .stat-card:nth-child(3) { animation-delay: .15s; }
+    .stat-card:nth-child(4) { animation-delay: .20s; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+    .stat-header { display: flex; align-items: center; justify-content: space-between; }
+    .stat-label { font-size: 12.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .stat-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stat-icon svg { width: 17px; height: 17px; }
+    .stat-icon.teal  { background: rgba(13,148,136,.1);  color: var(--teal); }
+    .stat-icon.amber { background: rgba(245,158,11,.1);  color: var(--amber); }
+    .stat-icon.green { background: rgba(16,185,129,.1);  color: var(--green); }
+    .stat-icon.red   { background: rgba(239,68,68,.1);   color: var(--red); }
+
+    .stat-value { font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1; }
+    .stat-trend { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
+    .stat-trend.up   { color: var(--green); }
+    .stat-trend.down { color: var(--red); }
+    .stat-trend span { color: var(--muted); font-weight: 400; }
+
+    /* ══════════════════════════════════════
+       BOTTOM GRID
+    ══════════════════════════════════════ */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+    }
+    @media (max-width: 1024px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+    /* Panel */
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      animation: fadeUp .5s ease .25s forwards; opacity: 0;
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title { font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: var(--ink); }
+    .panel-action {
+      font-size: 12px; font-weight: 600; color: var(--teal);
+      cursor: pointer; text-decoration: none;
+      padding: 5px 10px; border-radius: 7px;
+      transition: background .15s;
+    }
+    .panel-action:hover { background: var(--teal-xl); }
+
+    /* Orders table */
+    .orders-table { width: 100%; border-collapse: collapse; }
+    .orders-table th {
+      text-align: left; padding: 10px 20px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--muted);
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+    .orders-table td { padding: 14px 20px; font-size: 13.5px; border-bottom: 1px solid var(--border); }
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tr:hover td { background: #fafafa; }
+    .order-id { font-weight: 700; color: var(--ink); font-size: 12.5px; }
+    .order-occasion { display: flex; align-items: center; gap-7px; }
+    .order-emoji { font-size: 16px; margin-right: 6px; }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .status-badge::before { content:''; width:6px; height:6px; border-radius:50%; }
+    .status-badge.pending  { background: rgba(245,158,11,.1);  color: #92400e; }
+    .status-badge.pending::before  { background: var(--amber); }
+    .status-badge.shipped  { background: rgba(13,148,136,.1);  color: var(--teal); }
+    .status-badge.shipped::before  { background: var(--teal); }
+    .status-badge.delivered{ background: rgba(16,185,129,.1);  color: #065f46; }
+    .status-badge.delivered::before{ background: var(--green); }
+    .status-badge.cancelled{ background: rgba(239,68,68,.1);   color: #7f1d1d; }
+    .status-badge.cancelled::before{ background: var(--red); }
+
+    /* Right column */
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Country repartition */
+    .country-list { padding: 4px 0; }
+    .country-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .country-row:last-child { border-bottom: none; }
+    .country-flag { font-size: 20px; width: 28px; text-align: center; }
+    .country-info { flex: 1; }
+    .country-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .country-bar-wrap { height: 4px; background: var(--border); border-radius: 999px; margin-top: 5px; }
+    .country-bar { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--teal-l), var(--teal)); }
+    .country-pct { font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+
+    /* Recent activity */
+    .activity-list { padding: 4px 20px 12px; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot {
+      width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
+    }
+    .activity-dot.teal  { background: var(--teal); }
+    .activity-dot.amber { background: var(--amber); }
+    .activity-dot.green { background: var(--green); }
+    .activity-dot.red   { background: var(--red); }
+    .activity-text { font-size: 12.5px; color: var(--ink); line-height: 1.5; flex: 1; }
+    .activity-text strong { font-weight: 600; }
+    .activity-time { font-size: 11px; color: var(--muted); white-space: nowrap; margin-top: 2px; }
+
+    /* Overlay (mobile) */
+    #overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.45); z-index: 99;
+    }
+    #overlay.show { display: block; }
+
+    /* Page tabs */
+    .page-tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 24px; }
+    .page-tab {
+      padding: 7px 16px; border-radius: 9px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background .15s, color .15s;
+      color: var(--muted); background: transparent;
+      border: none;
+    }
+    .page-tab.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,.08); font-weight: 600; }
+    .page-tab:hover:not(.active) { color: var(--ink); }
+  </style>
+</head>
+<body>
+
+  <!-- ══ OVERLAY mobile ══ -->
+  <div id="overlay" onclick="closeMobile()"></div>
+
+  <!-- ══════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════ -->
+  <aside id="sidebar">
+
+    <!-- Toggle (desktop) -->
+    <button id="toggleBtn" onclick="toggleSidebar()" title="Réduire">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V11"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-title">Mystery Box</div>
+        <div class="sidebar-subtitle">Global · Admin</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+
+      <div class="nav-section-label">Principal</div>
+
+      <a class="nav-item active" href="#" data-tooltip="Dashboard">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="nav-label">Dashboard</span>
+      </a>
+
+      <a class="nav-item" href="#" data-tooltip="Commandes">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span class="nav-label">Commandes</span>
+        <span class="nav-badge red">12</span>
+      </a>
+
+      <a class="nav-item" href="#" data-tooltip="Produits">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V11"/></svg>
+        <span class="nav-label">Box & Produits</span>
+      </a>
+
+      <a class="nav-item" href="#" data-tooltip="Occasions">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+        <span class="nav-label">Occasions</span>
+        <span class="nav-badge amber">3</span>
+      </a>
+
+      <a class="nav-item" href="#" data-tooltip="Clients">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span class="nav-label">Clients</span>
+      </a>
+
+      <div class="nav-section-label">Gestion</div>
+
+      <a class="nav-item" href="#" data-tooltip="Livraisons">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM17 12V9.5h2.5L21 12H17z"/></svg>
+        <span class="nav-label">Livraisons</span>
+      </a>
+
+      <a class="nav-item" href="#" data-tooltip="Pays">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+        <span class="nav-label">Pays & Disponibilité</span>
+      </a>
+
+      <a class="nav-item" href="#" data-tooltip="Revenus">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span class="nav-label">Revenus</span>
+      </a>
+
+      <div class="nav-section-label">Système</div>
+
+      <a class="nav-item" href="#" data-tooltip="Paramètres">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span class="nav-label">Paramètres</span>
+      </a>
+
+    </nav>
+
+    <!-- User footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-avatar">E</div>
+      <div class="sidebar-footer-text">
+        <div class="sidebar-footer-name">Esaïe O.</div>
+        <div class="sidebar-footer-role">Administrateur</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ══════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════ -->
+  <div id="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar-burger" onclick="openMobile()">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-search">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        Rechercher…
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="topbar-avatar">E</div>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <div class="page-content">
+
+      <!-- Tabs -->
+      <div class="page-tabs">
+        <button class="page-tab active">Vue d'ensemble</button>
+        <button class="page-tab">Ce mois</button>
+        <button class="page-tab">Cette semaine</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Commandes</span>
+            <div class="stat-icon teal">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            </div>
+          </div>
+          <div class="stat-value">348</div>
+          <div class="stat-trend up">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+            +18% <span>vs mois dernier</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Revenus</span>
+            <div class="stat-icon green">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <div class="stat-value">24 810€</div>
+          <div class="stat-trend up">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+            +24% <span>vs mois dernier</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Clients</span>
+            <div class="stat-icon amber">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+          </div>
+          <div class="stat-value">1 204</div>
+          <div class="stat-trend up">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+            +9% <span>vs mois dernier</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">En attente</span>
+            <div class="stat-icon red">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <div class="stat-value">12</div>
+          <div class="stat-trend down">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+            −3 <span>depuis hier</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom grid -->
+      <div class="bottom-grid">
+
+        <!-- Orders table -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Dernières commandes</span>
+            <a class="panel-action" href="#">Voir tout →</a>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>N° Commande</th>
+                  <th>Occasion</th>
+                  <th>Pays</th>
+                  <th>Montant</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="order-id">#MBG-2418</span></td>
+                  <td><span class="order-emoji">🎄</span>Noël — Premium</td>
+                  <td>🇫🇷 France</td>
+                  <td style="font-weight:700;">59€</td>
+                  <td><span class="status-badge shipped">Expédiée</span></td>
+                </tr>
+                <tr>
+                  <td><span class="order-id">#MBG-2417</span></td>
+                  <td><span class="order-emoji">🌙</span>Ramadan — Nour</td>
+                  <td>🇧🇯 Bénin</td>
+                  <td style="font-weight:700;">55€</td>
+                  <td><span class="status-badge pending">En attente</span></td>
+                </tr>
+                <tr>
+                  <td><span class="order-id">#MBG-2416</span></td>
+                  <td><span class="order-emoji">💍</span>Mariage — Éternité</td>
+                  <td>🇨🇮 Côte d'Ivoire</td>
+                  <td style="font-weight:700;">149€</td>
+                  <td><span class="status-badge delivered">Livrée</span></td>
+                </tr>
+                <tr>
+                  <td><span class="order-id">#MBG-2415</span></td>
+                  <td><span class="order-emoji">👶</span>Naissance — Bienvenue</td>
+                  <td>🇨🇮 Côte d'Ivoire</td>
+                  <td style="font-weight:700;">70€</td>
+                  <td><span class="status-badge delivered">Livrée</span></td>
+                </tr>
+                <tr>
+                  <td><span class="order-id">#MBG-2414</span></td>
+                  <td><span class="order-emoji">🎄</span>Noël — Luxe</td>
+                  <td>🇫🇷 France</td>
+                  <td style="font-weight:700;">99€</td>
+                  <td><span class="status-badge pending">En attente</span></td>
+                </tr>
+                <tr>
+                  <td><span class="order-id">#MBG-2413</span></td>
+                  <td><span class="order-emoji">🌙</span>Ramadan — Rahma</td>
+                  <td>🇧🇯 Bénin</td>
+                  <td style="font-weight:700;">95€</td>
+                  <td><span class="status-badge cancelled">Annulée</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="right-col">
+
+          <!-- Countries -->
+          <div class="panel" style="animation-delay:.35s">
+            <div class="panel-header">
+              <span class="panel-title">Répartition par pays</span>
+            </div>
+            <div class="country-list">
+              <div class="country-row">
+                <span class="country-flag">🇫🇷</span>
+                <div class="country-info">
+                  <div class="country-name">France</div>
+                  <div class="country-bar-wrap"><div class="country-bar" style="width:58%"></div></div>
+                </div>
+                <span class="country-pct">58%</span>
+              </div>
+              <div class="country-row">
+                <span class="country-flag">🇧🇯</span>
+                <div class="country-info">
+                  <div class="country-name">Bénin</div>
+                  <div class="country-bar-wrap"><div class="country-bar" style="width:26%"></div></div>
+                </div>
+                <span class="country-pct">26%</span>
+              </div>
+              <div class="country-row">
+                <span class="country-flag">🇨🇮</span>
+                <div class="country-info">
+                  <div class="country-name">Côte d'Ivoire</div>
+                  <div class="country-bar-wrap"><div class="country-bar" style="width:16%"></div></div>
+                </div>
+                <span class="country-pct">16%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity -->
+          <div class="panel" style="animation-delay:.45s">
+            <div class="panel-header">
+              <span class="panel-title">Activité récente</span>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-dot teal"></div>
+                <div style="flex:1">
+                  <div class="activity-text"><strong>Nouvelle commande</strong> #MBG-2418 — Noël Premium</div>
+                  <div class="activity-time">Il y a 4 min</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot green"></div>
+                <div style="flex:1">
+                  <div class="activity-text"><strong>Livraison confirmée</strong> #MBG-2416 — Côte d'Ivoire</div>
+                  <div class="activity-time">Il y a 22 min</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot amber"></div>
+                <div style="flex:1">
+                  <div class="activity-text"><strong>Nouveau client</strong> Amira T. s'est inscrite</div>
+                  <div class="activity-time">Il y a 1h</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot red"></div>
+                <div style="flex:1">
+                  <div class="activity-text"><strong>Annulation</strong> #MBG-2413 — remboursement lancé</div>
+                  <div class="activity-time">Il y a 3h</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot teal"></div>
+                <div style="flex:1">
+                  <div class="activity-text"><strong>5 commandes</strong> expédiées vers la France</div>
+                  <div class="activity-time">Hier 18h</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Desktop collapse
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    // Mobile open/close
+    function openMobile() {
+      document.getElementById('sidebar').classList.add('mobile-open');
+      document.getElementById('overlay').classList.add('show');
+    }
+    function closeMobile() {
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      document.getElementById('overlay').classList.remove('show');
+    }
+
+    // Nav active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Tabs
+    document.querySelectorAll('.page-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mystery Box Global — La surprise parfaite</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' },
+            teal: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e' },
+            sage: { 50: '#f6f7f6', 100: '#e8ebe8', 200: '#ccd3cc', 300: '#a5b3a5', 400: '#7a907a', 500: '#5c735c', 600: '#485c48' },
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; background-color: #f8fafc; }
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .hero-bg {
+      background: linear-gradient(135deg, #f0fdfa 0%, #e8f4f0 30%, #f1f5f9 60%, #fafaf8 100%);
+    }
+    .card-hover { transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .occasion-card { position: relative; overflow: hidden; }
+    .occasion-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(20,184,166,0.08) 100%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .occasion-card:hover::before { opacity: 1; }
+    .tag-badge {
+      background: rgba(14,165,133,0.12);
+      color: #0d9488;
+      border: 1px solid rgba(14,165,133,0.2);
+    }
+    .hero-float { animation: heroFloat 6s ease-in-out infinite; }
+    @keyframes heroFloat { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+    .fade-in { animation: fadeIn 0.7s ease forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; } }
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    .stagger-6 { animation-delay: 0.6s; }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #14b8a6; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+    .mesh-bg {
+      background-image: radial-gradient(circle at 20% 20%, rgba(20,184,166,0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(94,115,94,0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(148,163,184,0.04) 0%, transparent 70%);
+    }
+    .scroll-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Card states ── */
+    .card-unavailable {
+      opacity: 0.55;
+      cursor: not-allowed !important;
+      filter: grayscale(0.4);
+    }
+    .card-unavailable:hover { transform: none !important; box-shadow: none !important; }
+    .card-unavailable::before { display: none !important; }
+
+    .badge-soon {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #92400e;
+      border: 1px solid rgba(245,158,11,0.3);
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 3px 8px; border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .badge-unavailable {
+      background: rgba(100,116,139,0.1);
+      color: #64748b;
+      border: 1px solid rgba(100,116,139,0.2);
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 3px 8px; border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+
+    /* ── Unavailable Modal ── */
+    #unavailModal {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      background: rgba(15,23,42,0.55);
+      backdrop-filter: blur(6px);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    #unavailModal.open { opacity: 1; visibility: visible; }
+    #unavailModal .modal-box {
+      background: white; border-radius: 24px;
+      padding: 36px 32px; max-width: 420px; width: 100%;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.2);
+      transform: translateY(16px) scale(0.97);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      text-align: center;
+    }
+    #unavailModal.open .modal-box { transform: translateY(0) scale(1); }
+    .modal-icon {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; margin: 0 auto 20px;
+    }
+    .modal-country-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+    .modal-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 999px;
+      background: #f0fdfa; border: 1px solid rgba(20,184,166,0.2);
+      font-size: 13px; font-weight: 500; color: #0d9488;
+    }
+
+    /* Country Selector */
+    .country-selector { position: relative; }
+    .country-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 999px;
+      border: 1px solid rgba(20,184,166,0.25);
+      background: rgba(20,184,166,0.06);
+      cursor: pointer; transition: all 0.2s ease;
+      font-size: 13px; font-weight: 500; color: #0f766e;
+      user-select: none;
+    }
+    .country-btn:hover { background: rgba(20,184,166,0.12); border-color: rgba(20,184,166,0.4); }
+    .country-btn .flag { font-size: 16px; line-height: 1; }
+    .country-btn .chevron { width: 14px; height: 14px; transition: transform 0.2s ease; flex-shrink:0; }
+    .country-btn.open .chevron { transform: rotate(180deg); }
+
+    .country-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: white; border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.07);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+      min-width: 200px; overflow: hidden;
+      opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.97);
+      transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+      z-index: 100;
+    }
+    .country-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+    .country-dropdown-header {
+      padding: 12px 16px 8px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: #94a3b8;
+    }
+    .country-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; cursor: pointer;
+      transition: background 0.15s ease; font-size: 13px; font-weight: 500;
+      color: #334155;
+    }
+    .country-option:hover { background: #f0fdfa; }
+    .country-option.active { background: #f0fdfa; color: #0d9488; }
+    .country-option .flag { font-size: 18px; }
+    .country-option .country-label { flex: 1; }
+    .country-option .currency { font-size: 11px; color: #94a3b8; background: #f1f5f9; padding: 2px 6px; border-radius: 999px; }
+    .country-option .check { width: 14px; height: 14px; color: #14b8a6; }
+
+    /* Banner under header */
+    #country-banner {
+      background: linear-gradient(90deg, #f0fdfa, #e8f7f4, #f0fdfa);
+      border-bottom: 1px solid rgba(20,184,166,0.15);
+      padding: 7px 16px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      font-size: 12.5px; color: #0f766e; font-weight: 500;
+      animation: fadeIn 0.5s ease;
+    }
+    #country-banner .banner-flag { font-size: 16px; }
+    #country-banner strong { font-weight: 700; }
+
+    /* ── Country Welcome Modal ── */
+    #countryWelcomeModal {
+      position: fixed; inset: 0; z-index: 99999;
+      background: rgba(15,23,42,0.55);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      padding: 20px;
+    }
+    #countryWelcomeModal.open { opacity: 1; visibility: visible; }
+    #countryWelcomeModal .wm-box {
+      background: #ffffff;
+      border-radius: 24px;
+      width: 100%; max-width: 480px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      overflow: hidden;
+    }
+    #countryWelcomeModal.open .wm-box { transform: translateY(0) scale(1); }
+    .wm-header {
+      background: linear-gradient(135deg, #f0fdfa 0%, #e8f4f0 100%);
+      padding: 32px 28px 24px;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+      position: relative;
+    }
+    .wm-globe {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(13,148,136,0.3);
+    }
+    .wm-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      color: #0f172a; margin-bottom: 8px; line-height: 1.3;
+    }
+    .wm-sub {
+      font-size: 13.5px; color: #64748b; line-height: 1.6;
+    }
+    .wm-body { padding: 24px 28px 28px; }
+    .wm-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 12px;
+      display: block;
+    }
+    .wm-country-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .wm-country-opt {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-radius: 14px;
+      border: 2px solid #e2e8f0; cursor: pointer;
+      transition: all 0.2s ease; background: #f8fafc;
+      text-align: left; width: 100%; font-family: 'DM Sans', sans-serif;
+    }
+    .wm-country-opt:hover {
+      border-color: #14b8a6; background: #f0fdfa;
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(13,148,136,0.12);
+    }
+    .wm-country-opt.selected {
+      border-color: #0d9488; background: #f0fdfa;
+    }
+    .wm-country-opt.selected .wm-check { opacity: 1; }
+    .wm-flag { font-size: 28px; line-height: 1; flex-shrink: 0; }
+    .wm-cname { font-size: 15px; font-weight: 600; color: #0f172a; }
+    .wm-ccurr { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+    .wm-check {
+      margin-left: auto; width: 22px; height: 22px; border-radius: 50%;
+      background: #0d9488; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.2s ease; flex-shrink: 0;
+    }
+    .wm-check svg { width: 12px; height: 12px; color: white; stroke: white; }
+    .wm-confirm {
+      width: 100%; padding: 14px 20px; border-radius: 14px; border: none;
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      color: white; font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(13,148,136,0.35);
+    }
+    .wm-confirm:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(13,148,136,0.4); }
+    .wm-confirm:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .wm-skip {
+      display: block; text-align: center; margin-top: 12px;
+      font-size: 12.5px; color: #94a3b8; cursor: pointer;
+      transition: color 0.15s;
+    }
+    .wm-skip:hover { color: #64748b; }
+
+    /* Mobile country select */
+    .mobile-country-row {
+      display: flex; align-items: center; gap-3; padding: 8px 0;
+      border-top: 1px solid #f1f5f9; margin-top: 4px;
+    }
+  </style>
+</head>
+<body class="text-slate-800">
+
+  <!-- ══════════════════════════════════════════════════════
+       COUNTRY WELCOME MODAL
+  ══════════════════════════════════════════════════════ -->
+  <div id="countryWelcomeModal" role="dialog" aria-modal="true" aria-labelledby="wmTitle">
+    <div class="wm-box">
+
+      <div class="wm-header">
+        <div class="wm-globe">🌍</div>
+        <div class="wm-title" id="wmTitle">Bienvenue chez Mystery Box Global !</div>
+        <p class="wm-sub">Pour vous offrir la meilleure expérience, dites-nous depuis quel pays vous nous rendez visite.</p>
+      </div>
+
+      <div class="wm-body">
+        <span class="wm-label">Sélectionnez votre pays</span>
+
+        <div class="wm-country-list">
+
+          <button class="wm-country-opt" data-code="FR" data-flag="🇫🇷" data-name="France" data-currency="EUR" data-curr-name="Euro" onclick="wmSelect(this)">
+            <span class="wm-flag">🇫🇷</span>
+            <div>
+              <div class="wm-cname">France</div>
+              <div class="wm-ccurr">EUR — Euro · Livraison 2–3 jours</div>
+            </div>
+            <span class="wm-check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+          </button>
+
+          <button class="wm-country-opt" data-code="BJ" data-flag="🇧🇯" data-name="Bénin" data-currency="XOF" data-curr-name="Franc CFA" onclick="wmSelect(this)">
+            <span class="wm-flag">🇧🇯</span>
+            <div>
+              <div class="wm-cname">Bénin</div>
+              <div class="wm-ccurr">XOF — Franc CFA · Livraison 5–7 jours</div>
+            </div>
+            <span class="wm-check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+          </button>
+
+          <button class="wm-country-opt" data-code="CI" data-flag="🇨🇮" data-name="Côte d'Ivoire" data-currency="XOF" data-curr-name="Franc CFA" onclick="wmSelect(this)">
+            <span class="wm-flag">🇨🇮</span>
+            <div>
+              <div class="wm-cname">Côte d'Ivoire</div>
+              <div class="wm-ccurr">XOF — Franc CFA · Livraison 5–7 jours</div>
+            </div>
+            <span class="wm-check"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>
+          </button>
+
+        </div>
+
+        <button class="wm-confirm" id="wmConfirmBtn" disabled onclick="wmConfirm()">
+          Confirmer mon pays
+        </button>
+        <span class="wm-skip" onclick="wmSkip()">Continuer sans sélectionner →</span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-sage-600 flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V11"/></svg>
+          </div>
+          <span class="font-serif font-semibold text-slate-800 text-lg leading-tight">Mystery Box<br><span class="text-xs font-sans font-normal text-slate-400 tracking-widest uppercase" style="font-size:9px;letter-spacing:.12em;">Global</span></span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="index.html" class="nav-link text-sm font-medium text-slate-700 hover:text-teal-600 transition-colors">Accueil</a>
+          <a href="#occasions" class="nav-link text-sm font-medium text-slate-700 hover:text-teal-600 transition-colors">Occasions</a>
+          <a href="contact.html" class="nav-link text-sm font-medium text-slate-700 hover:text-teal-600 transition-colors">Contact</a>
+        </nav>
+
+        <!-- CTA + Mobile -->
+        <div class="flex items-center gap-3">
+          <a href="#" class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            Connexion
+          </a>
+
+          <!-- Country Selector Desktop -->
+          <div class="country-selector hidden md:block" id="countrySelectorDesktop">
+            <button class="country-btn" id="countryBtn" onclick="toggleDropdown()">
+              <span class="flag" id="currentFlag">🌍</span>
+              <span id="currentCountryName">Pays</span>
+              <svg class="chevron" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="country-dropdown" id="countryDropdown">
+              <div class="country-dropdown-header">Choisir un pays</div>
+              <div class="country-option" data-code="BJ" data-flag="🇧🇯" data-name="Bénin" data-currency="XOF" onclick="selectCountry('BJ','🇧🇯','Bénin','XOF','Franc CFA')">
+                <span class="flag">🇧🇯</span>
+                <span class="country-label">Bénin</span>
+                <span class="currency">XOF</span>
+                <svg class="check hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div class="country-option" data-code="CI" data-flag="🇨🇮" data-name="Côte d'Ivoire" data-currency="XOF" onclick="selectCountry('CI','🇨🇮','Côte d\'Ivoire','XOF','Franc CFA')">
+                <span class="flag">🇨🇮</span>
+                <span class="country-label">Côte d'Ivoire</span>
+                <span class="currency">XOF</span>
+                <svg class="check hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div class="country-option" data-code="FR" data-flag="🇫🇷" data-name="France" data-currency="EUR" onclick="selectCountry('FR','🇫🇷','France','EUR','Euro')">
+                <span class="flag">🇫🇷</span>
+                <span class="country-label">France</span>
+                <span class="currency">EUR</span>
+                <svg class="check hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- Burger -->
+          <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label="Menu">
+            <svg class="w-5 h-5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-slate-100 px-4 py-4 space-y-3">
+      <a href="index.html" class="block text-sm font-medium text-slate-700 py-2 hover:text-teal-600">Accueil</a>
+      <a href="#occasions" class="block text-sm font-medium text-slate-700 py-2 hover:text-teal-600">Occasions</a>
+      <a href="contact.html" class="block text-sm font-medium text-slate-700 py-2 hover:text-teal-600">Contact</a>
+      <a href="#" class="block text-sm font-medium text-slate-700 py-2 hover:text-teal-600">Connexion</a>
+      <!-- Mobile country selector -->
+      <div class="border-t border-slate-100 pt-3 mt-1">
+        <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-2">Choisir un pays</p>
+        <div class="flex gap-2">
+          <button onclick="selectCountry('BJ','🇧🇯','Bénin','XOF','Franc CFA')" data-mobile-code="BJ"
+            class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-medium transition-all mobile-country-btn border-slate-200 text-slate-600 hover:border-teal-300 hover:bg-teal-50">
+            🇧🇯 Bénin
+          </button>
+          <button onclick="selectCountry('CI','🇨🇮','Côte d\'Ivoire','XOF','Franc CFA')" data-mobile-code="CI"
+            class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-medium transition-all mobile-country-btn border-slate-200 text-slate-600 hover:border-teal-300 hover:bg-teal-50">
+            🇨🇮 CI
+          </button>
+          <button onclick="selectCountry('FR','🇫🇷','France','EUR','Euro')" data-mobile-code="FR"
+            class="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border text-xs font-medium transition-all mobile-country-btn border-slate-200 text-slate-600 hover:border-teal-300 hover:bg-teal-50">
+            🇫🇷 France
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Country Banner -->
+  <div id="country-banner" style="display:none;">
+    <span class="banner-flag" id="bannerFlag">🌍</span>
+    <span>Vous naviguez sur la version <strong id="bannerCountry">—</strong> — livraison &amp; prix adaptés</span>
+    <svg style="width:14px;height:14px;color:#14b8a6;flex-shrink:0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero-bg mesh-bg min-h-[90vh] flex items-center relative overflow-hidden">
+    <!-- Decorative shapes -->
+    <div class="absolute top-20 right-10 w-64 h-64 rounded-full bg-teal-100/40 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-20 left-10 w-48 h-48 rounded-full bg-sage-100/40 blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 right-1/4 w-32 h-32 rounded-full bg-slate-200/30 blur-2xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Text -->
+        <div>
+          <div class="fade-in stagger-1 inline-flex items-center gap-2 px-3 py-1.5 rounded-full tag-badge text-xs font-medium mb-6">
+            <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+            Livraison mondiale disponible
+          </div>
+          <h1 class="fade-in stagger-2 font-serif text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-800 leading-tight mb-6">
+            L'art de la<br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-sage-600">surprise</span><br/>
+            parfaite.
+          </h1>
+          <p class="fade-in stagger-3 text-slate-500 text-lg leading-relaxed mb-8 max-w-md">
+            Offrez une expérience unique pour chaque occasion. Nos box mystères sont soigneusement composées pour créer des moments inoubliables — quelle que soit la célébration.
+          </p>
+          <div class="fade-in stagger-4 flex flex-col sm:flex-row gap-4">
+            <a href="#occasions" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 transition-all shadow-lg shadow-teal-200 hover:shadow-teal-300">
+              Explorer les occasions
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+            <a href="contact.html" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-slate-200 text-slate-600 text-sm font-medium hover:bg-white hover:shadow-md transition-all">
+              Comment ça marche ?
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="fade-in stagger-5 flex gap-8 mt-12 pt-10 border-t border-slate-200">
+            <div>
+              <div class="font-serif text-2xl font-bold text-slate-800">2 000+</div>
+              <div class="text-xs text-slate-400 mt-1">Box livrées</div>
+            </div>
+            <div class="w-px bg-slate-200"></div>
+            <div>
+              <div class="font-serif text-2xl font-bold text-slate-800">12+</div>
+              <div class="text-xs text-slate-400 mt-1">Occasions couvertes</div>
+            </div>
+            <div class="w-px bg-slate-200"></div>
+            <div>
+              <div class="font-serif text-2xl font-bold text-slate-800">4.9 ★</div>
+              <div class="text-xs text-slate-400 mt-1">Note moyenne</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="fade-in stagger-6 hidden lg:flex justify-center items-center">
+          <div class="relative">
+            <!-- Main box -->
+            <div class="hero-float w-72 h-72 rounded-3xl bg-gradient-to-br from-teal-500 to-teal-700 shadow-2xl shadow-teal-200 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-7xl mb-4">🎁</div>
+                <div class="text-white font-serif text-xl font-semibold">Mystery Box</div>
+                <div class="text-teal-200 text-sm mt-1">Surprise garantie</div>
+              </div>
+            </div>
+            <!-- Floating cards -->
+            <div class="absolute -top-6 -left-12 bg-white rounded-2xl shadow-lg p-3 flex items-center gap-3 w-44" style="animation: heroFloat 5s ease-in-out 1s infinite;">
+              <div class="text-2xl">🎄</div>
+              <div><div class="text-xs font-semibold text-slate-700">Noël</div><div class="text-xs text-slate-400">3 catégories</div></div>
+            </div>
+            <div class="absolute -bottom-6 -right-10 bg-white rounded-2xl shadow-lg p-3 flex items-center gap-3 w-44" style="animation: heroFloat 5.5s ease-in-out 0.5s infinite;">
+              <div class="text-2xl">🎂</div>
+              <div><div class="text-xs font-semibold text-slate-700">Anniversaire</div><div class="text-xs text-slate-400">3 catégories</div></div>
+            </div>
+            <div class="absolute top-1/2 -right-16 bg-white rounded-2xl shadow-lg p-3 flex items-center gap-3 w-40" style="animation: heroFloat 6s ease-in-out 2s infinite;">
+              <div class="text-2xl">🌙</div>
+              <div><div class="text-xs font-semibold text-slate-700">Ramadan</div><div class="text-xs text-slate-400">3 catégories</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 scroll-reveal">
+        <p class="text-teal-600 text-sm font-semibold uppercase tracking-widest mb-3">Simple & rapide</p>
+        <h2 class="font-serif text-4xl font-bold text-slate-800">Comment ça fonctionne ?</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="scroll-reveal text-center">
+          <div class="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-5 text-teal-600">
+            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+          </div>
+          <div class="font-serif text-5xl font-bold text-slate-100 mb-3">01</div>
+          <h3 class="font-semibold text-slate-800 text-lg mb-2">Choisissez l'occasion</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Sélectionnez l'événement à célébrer parmi notre sélection d'occasions.</p>
+        </div>
+        <div class="scroll-reveal text-center" style="transition-delay:0.15s">
+          <div class="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-5 text-teal-600">
+            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          </div>
+          <div class="font-serif text-5xl font-bold text-slate-100 mb-3">02</div>
+          <h3 class="font-semibold text-slate-800 text-lg mb-2">Sélectionnez la catégorie</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">3 catégories disponibles par occasion. Choisissez selon votre budget et vos envies.</p>
+        </div>
+        <div class="scroll-reveal text-center" style="transition-delay:0.3s">
+          <div class="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-5 text-teal-600">
+            <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V11"/></svg>
+          </div>
+          <div class="font-serif text-5xl font-bold text-slate-100 mb-3">03</div>
+          <h3 class="font-semibold text-slate-800 text-lg mb-2">Personnalisez & commandez</h3>
+          <p class="text-slate-500 text-sm leading-relaxed">Ajoutez un message, choisissez l'envoi anonyme et procédez au paiement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OCCASIONS GRID -->
+  <section id="occasions" class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 scroll-reveal">
+        <p class="text-teal-600 text-sm font-semibold uppercase tracking-widest mb-3">Toutes les occasions</p>
+        <h2 class="font-serif text-4xl font-bold text-slate-800 mb-4">Quelle est l'occasion ?</h2>
+        <p class="text-slate-500 max-w-lg mx-auto">Chaque occasion mérite une surprise unique. Choisissez ci-dessous pour découvrir les box disponibles.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+        <!-- ✅ DISPONIBLE — Noël -->
+        <a href="occasion.html?occasion=noel" class="occasion-card card-hover bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.00s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1512909006721-3d6018887383?w=400&h=200&fit=crop&auto=format" alt="Box Noël" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">🎄</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Noël</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Créez la magie des fêtes avec une box soigneusement composée.</p>
+            <div class="flex items-center justify-between">
+              <span class="tag-badge text-xs px-2.5 py-1 rounded-full font-medium">3 catégories</span>
+              <svg class="w-5 h-5 text-slate-300 group-hover:text-teal-500 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- ✅ DISPONIBLE — Ramadan -->
+        <a href="occasion.html?occasion=ramadan" class="occasion-card card-hover bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.05s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1591289009723-aef0a1a8a211?w=400&h=200&fit=crop&auto=format" alt="Box Ramadan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">🌙</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Ramadan</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Une sélection pensée pour ce mois béni, riche en partage.</p>
+            <div class="flex items-center justify-between">
+              <span class="tag-badge text-xs px-2.5 py-1 rounded-full font-medium">3 catégories</span>
+              <svg class="w-5 h-5 text-slate-300 group-hover:text-teal-500 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 🚫 INDISPONIBLE — Anniversaire -->
+        <div onclick="openUnavailModal(this)"
+          data-emoji="🎂" data-name="Anniversaire" data-avail-in="FR" data-is-soon="0"
+          class="occasion-card card-hover card-unavailable bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.10s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&h=200&fit=crop&auto=format" alt="Box Anniversaire" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">🎂</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Anniversaire</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Offrez une journée inoubliable avec la box surprise idéale.</p>
+            <div class="flex items-center justify-between">
+              <span class="badge-unavailable">🚫 Indisponible</span>
+              <svg class="w-5 h-5 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⏳ BIENTÔT — Fête des Pères -->
+        <div onclick="openUnavailModal(this)"
+          data-emoji="👨‍👧" data-name="Fête des Pères" data-avail-in="" data-is-soon="1"
+          class="occasion-card card-hover card-unavailable bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.15s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400&h=200&fit=crop&auto=format" alt="Box Fête des Pères" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">👨‍👧</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Fête des Pères</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Montrez-lui toute votre reconnaissance avec une surprise de choix.</p>
+            <div class="flex items-center justify-between">
+              <span class="badge-soon">⏳ Bientôt</span>
+              <svg class="w-5 h-5 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ⏳ BIENTÔT — Fête des Mères -->
+        <div onclick="openUnavailModal(this)"
+          data-emoji="💐" data-name="Fête des Mères" data-avail-in="" data-is-soon="1"
+          class="occasion-card card-hover card-unavailable bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.20s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&h=200&fit=crop&auto=format" alt="Box Fête des Mères" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">💐</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Fête des Mères</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Gâtez la plus importante personne de votre vie.</p>
+            <div class="flex items-center justify-between">
+              <span class="badge-soon">⏳ Bientôt</span>
+              <svg class="w-5 h-5 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ DISPONIBLE — Mariage -->
+        <a href="occasion.html?occasion=mariage" class="occasion-card card-hover bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.25s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&h=200&fit=crop&auto=format" alt="Box Mariage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">💍</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Mariage</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Un cadeau à la hauteur de ce grand jour mémorable.</p>
+            <div class="flex items-center justify-between">
+              <span class="tag-badge text-xs px-2.5 py-1 rounded-full font-medium">3 catégories</span>
+              <svg class="w-5 h-5 text-slate-300 group-hover:text-teal-500 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </div>
+          </div>
+        </a>
+
+        <!-- 🚫 INDISPONIBLE — Remise de diplôme -->
+        <div onclick="openUnavailModal(this)"
+          data-emoji="🎓" data-name="Remise de diplôme" data-avail-in="" data-is-soon="0"
+          class="occasion-card card-hover card-unavailable bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.30s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1627556704302-624286467c65?w=400&h=200&fit=crop&auto=format" alt="Box Diplôme" class="w-full h-full object-cover"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">🎓</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Remise de diplôme</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Félicitez le lauréat avec une box digne de ses efforts.</p>
+            <div class="flex items-center justify-between">
+              <span class="badge-unavailable">🚫 Indisponible</span>
+              <svg class="w-5 h-5 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ DISPONIBLE — Naissance -->
+        <a href="occasion.html?occasion=naissance" class="occasion-card card-hover bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer group scroll-reveal block" style="transition-delay:0.35s">
+          <div class="relative h-44 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=200&fit=crop&auto=format" alt="Box Naissance" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            <span class="absolute top-3 left-3 text-2xl">👶</span>
+          </div>
+          <div class="p-5">
+            <h3 class="font-serif font-semibold text-slate-800 text-lg mb-1">Naissance</h3>
+            <p class="text-slate-400 text-sm mb-4 leading-relaxed">Célébrez cette nouvelle vie avec une box pleine de tendresse.</p>
+            <div class="flex items-center justify-between">
+              <span class="tag-badge text-xs px-2.5 py-1 rounded-full font-medium">3 catégories</span>
+              <svg class="w-5 h-5 text-slate-300 group-hover:text-teal-500 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 scroll-reveal">
+        <p class="text-teal-600 text-sm font-semibold uppercase tracking-widest mb-3">Ils nous font confiance</p>
+        <h2 class="font-serif text-4xl font-bold text-slate-800">Ce qu'ils en disent</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="scroll-reveal bg-slate-50 rounded-2xl p-6 border border-slate-100">
+          <div class="flex gap-1 mb-4">
+            <span class="text-amber-400">★★★★★</span>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">"La box Ramadan était parfaite ! Tout était soigné, bien emballé, avec une vraie attention aux détails. Ma famille a adoré."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-semibold text-sm">S</div>
+            <div><div class="text-sm font-medium text-slate-800">Sana M.</div><div class="text-xs text-slate-400">Paris, France</div></div>
+          </div>
+        </div>
+        <div class="scroll-reveal bg-slate-50 rounded-2xl p-6 border border-slate-100" style="transition-delay:0.1s">
+          <div class="flex gap-1 mb-4">
+            <span class="text-amber-400">★★★★★</span>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">"J'ai commandé pour l'anniversaire de mon frère en dernière minute. Livraison rapide, box magnifique. Je recommande !"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 font-semibold text-sm">K</div>
+            <div><div class="text-sm font-medium text-slate-800">Karim B.</div><div class="text-xs text-slate-400">Lyon, France</div></div>
+          </div>
+        </div>
+        <div class="scroll-reveal bg-slate-50 rounded-2xl p-6 border border-slate-100" style="transition-delay:0.2s">
+          <div class="flex gap-1 mb-4">
+            <span class="text-amber-400">★★★★☆</span>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">"L'option d'envoi anonyme est fantastique. Le destinataire n'a pas su qui avait commandé — le suspense en plus !"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-semibold text-sm">A</div>
+            <div><div class="text-sm font-medium text-slate-800">Amira T.</div><div class="text-xs text-slate-400">Montréal, Canada</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="py-20 bg-gradient-to-br from-teal-600 to-teal-800 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 30% 50%, white 0%, transparent 50%), radial-gradient(circle at 70% 50%, white 0%, transparent 50%);"></div>
+    <div class="relative max-w-3xl mx-auto px-4 text-center scroll-reveal">
+      <h2 class="font-serif text-4xl lg:text-5xl font-bold text-white mb-5">Prêt à créer la surprise ?</h2>
+      <p class="text-teal-100 text-lg mb-8">Choisissez votre occasion et laissez-nous composer le cadeau parfait.</p>
+      <a href="#occasions" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-teal-700 font-semibold text-sm hover:bg-teal-50 transition-all shadow-xl">
+        Choisir une occasion
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Unavailability Modal -->
+  <div id="unavailModal" onclick="closeModal(event)">
+    <div class="modal-box">
+      <div class="modal-icon" id="modalIcon">🎁</div>
+      <h3 class="font-serif text-2xl font-bold text-slate-800 mb-3" id="modalTitle">Non disponible</h3>
+      <p class="text-slate-500 text-sm leading-relaxed mb-2" id="modalDesc">Cette occasion n'est pas encore disponible dans votre pays.</p>
+      <p id="modalAvailLabel" class="text-slate-400 text-sm mb-4">Elle est disponible dans :</p>
+      <div class="modal-country-chips" id="modalChips"></div>
+      <p id="modalHint" class="text-xs text-slate-400 mt-5 mb-6">Changez de pays dans la barre de navigation pour accéder à cette box.</p>
+      <button onclick="document.getElementById('unavailModal').classList.remove('open')"
+        class="w-full py-3 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700 transition-all">
+        Compris 👍
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-8 mb-10">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V11"/></svg>
+            </div>
+            <span class="font-serif font-semibold text-white text-lg">Mystery Box Global</span>
+          </div>
+          <p class="text-sm leading-relaxed">La plateforme premium de box cadeaux mystères pour toutes vos occasions.</p>
+        </div>
+        <div>
+          <div class="font-semibold text-white text-sm mb-4">Navigation</div>
+          <ul class="space-y-2 text-sm">
+            <li><a href="index.html" class="hover:text-teal-400 transition-colors">Accueil</a></li>
+            <li><a href="#occasions" class="hover:text-teal-400 transition-colors">Occasions</a></li>
+            <li><a href="contact.html" class="hover:text-teal-400 transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold text-white text-sm mb-4">Support</div>
+          <ul class="space-y-2 text-sm">
+            <li><a href="contact.html" class="hover:text-teal-400 transition-colors">Nous contacter</a></li>
+            <li><a href="#" class="hover:text-teal-400 transition-colors">FAQ</a></li>
+            <li><a href="#" class="hover:text-teal-400 transition-colors">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-slate-800 pt-6 text-center text-xs">
+        © 2025 Mystery Box Global. Tous droits réservés.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Mobile menu ───────────────────────────────────────
+    document.getElementById('menuBtn').addEventListener('click', () =>
+      document.getElementById('mobileMenu').classList.toggle('hidden')
+    );
+
+    // ── Scroll reveal ─────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+    // ── Country data ──────────────────────────────────────
+    const COUNTRIES = {
+      BJ: { flag: '\ud83c\udde7\ud83c\uddef', name: 'B\u00e9nin',        currency: 'XOF' },
+      CI: { flag: '\ud83c\udde8\ud83c\uddee', name: "C\u00f4te d\'Ivoire", currency: 'XOF' },
+      FR: { flag: '\ud83c\uddeb\ud83c\uddf7', name: 'France',        currency: 'EUR' },
+    };
+
+    // ── Country dropdown ──────────────────────────────────
+    function toggleDropdown() {
+      document.getElementById('countryBtn').classList.toggle('open');
+      document.getElementById('countryDropdown').classList.toggle('open');
+    }
+    document.addEventListener('click', (e) => {
+      const sel = document.getElementById('countrySelectorDesktop');
+      if (sel && !sel.contains(e.target)) {
+        document.getElementById('countryBtn').classList.remove('open');
+        document.getElementById('countryDropdown').classList.remove('open');
+      }
+    });
+
+    function selectCountry(code, flag, name, currency) {
+      localStorage.setItem('mbg_country', JSON.stringify({ code, flag, name, currency }));
+      document.getElementById('currentFlag').textContent = flag;
+      document.getElementById('currentCountryName').textContent = name;
+      document.getElementById('countryBtn').classList.remove('open');
+      document.getElementById('countryDropdown').classList.remove('open');
+      document.querySelectorAll('.country-option').forEach(opt => {
+        const check = opt.querySelector('.check');
+        if (opt.dataset.code === code) { opt.classList.add('active'); check?.classList.remove('hidden'); }
+        else { opt.classList.remove('active'); check?.classList.add('hidden'); }
+      });
+      document.querySelectorAll('.mobile-country-btn').forEach(btn => {
+        btn.style.cssText = btn.dataset.mobileCode === code
+          ? 'border-color:#14b8a6;background:#f0fdfa;color:#0d9488;' : '';
+      });
+      document.getElementById('bannerFlag').textContent = flag;
+      document.getElementById('bannerCountry').textContent = name;
+      document.getElementById('country-banner').style.display = 'flex';
+    }
+
+    // ── Auto-detect country on load ───────────────────────
+    (function init() {
+      const saved = localStorage.getItem('mbg_country');
+      if (saved) {
+        try { const { code, flag, name, currency } = JSON.parse(saved); selectCountry(code, flag, name, currency); return; } catch(e) {}
+      }
+      fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
+        const c = COUNTRIES[data.country_code];
+        if (c) selectCountry(data.country_code, c.flag, c.name, c.currency);
+      }).catch(() => {});
+    })();
+
+    // ── Modal indisponible ────────────────────────────────
+    function openUnavailModal(el) {
+      const isSoon  = el.dataset.isSoon === '1';
+      const availIn = el.dataset.availIn ? el.dataset.availIn.split(',').filter(Boolean) : [];
+
+      document.getElementById('modalIcon').textContent  = el.dataset.emoji;
+      document.getElementById('modalTitle').textContent = isSoon
+        ? el.dataset.name + ' \u2014 Bient\u00f4t disponible !'
+        : el.dataset.name + ' \u2014 Non disponible ici';
+      document.getElementById('modalDesc').textContent  = isSoon
+        ? 'Cette occasion arrive tr\u00e8s prochainement. Revenez nous rendre visite !'
+        : "Cette occasion n\'est pas disponible dans votre pays actuel.";
+
+      const chips  = document.getElementById('modalChips');
+      const pAvail = document.getElementById('modalAvailLabel');
+      const pHint  = document.getElementById('modalHint');
+
+      if (!isSoon && availIn.length > 0) {
+        chips.innerHTML = availIn.map(code => {
+          const c = COUNTRIES[code];
+          return c ? '<span class="modal-chip">' + c.flag + ' ' + c.name + '</span>' : '';
+        }).join('');
+        if (pAvail) pAvail.style.display = '';
+        if (pHint)  pHint.style.display  = '';
+      } else {
+        chips.innerHTML = '';
+        if (pAvail) pAvail.style.display = 'none';
+        if (pHint)  pHint.style.display  = 'none';
+      }
+
+      document.getElementById('unavailModal').classList.add('open');
+    }
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('unavailModal'))
+        document.getElementById('unavailModal').classList.remove('open');
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.getElementById('unavailModal').classList.remove('open');
+    });
+
+    // ══════════════════════════════════════════════════════
+    // COUNTRY WELCOME MODAL
+    // ══════════════════════════════════════════════════════
+    let wmSelectedData = null;
+
+    function wmSelect(btn) {
+      document.querySelectorAll('.wm-country-opt').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      wmSelectedData = {
+        code:     btn.dataset.code,
+        flag:     btn.dataset.flag,
+        name:     btn.dataset.name,
+        currency: btn.dataset.currency
+      };
+      document.getElementById('wmConfirmBtn').disabled = false;
+    }
+
+    function wmConfirm() {
+      if (!wmSelectedData) return;
+      const { code, flag, name, currency } = wmSelectedData;
+      selectCountry(code, flag, name, currency);
+      wmClose();
+    }
+
+    function wmSkip() {
+      sessionStorage.setItem('mbg_country_modal_seen', '1');
+      wmClose();
+    }
+
+    function wmClose() {
+      document.getElementById('countryWelcomeModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Show modal if country not yet saved in localStorage
+    (function initWelcomeModal() {
+      const saved   = null;// localStorage.getItem('mbg_country');
+      const skipped = sessionStorage.getItem('mbg_country_modal_seen');
+      if (!saved && !skipped) {
+        setTimeout(() => {
+          document.getElementById('countryWelcomeModal').classList.add('open');
+          document.body.style.overflow = 'hidden';
+          // Try to pre-select via IP geolocation
+          fetch('https://ipapi.co/json/')
+            .then(r => r.json())
+            .then(data => {
+              const btn = document.querySelector('.wm-country-opt[data-code="' + data.country_code + '"]');
+              if (btn) wmSelect(btn);
+            })
+            .catch(() => {});
+        }, 600);
+      }
+    })();
+
+  </script>
+</body>
+</html>
